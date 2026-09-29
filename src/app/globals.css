@@ -119,3 +119,21 @@ button, a { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } .reveal-ready { opacity: 1; transform: none; } }
 
 .bg-primary .eyebrow, .bg-primary .text-accent { color: rgb(var(--brand-highlight)); }
+
+/* Localização e páginas internas. */
+.store-location { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.store-copy { padding-left: 20px; }
+.store-address-card { border: 1px solid #d4e3ee; border-radius: 22px; padding: 34px; background: linear-gradient(135deg,#f0f7fc,#fff); }
+.store-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; color: rgb(var(--brand-accent)); }
+.store-street { font-size: clamp(22px,2.3vw,32px); letter-spacing: -.045em; }
+.store-street strong { color: rgb(var(--brand-accent)); font-weight: 500; }
+.store-details { display: grid; gap: 18px; margin: 25px 0; padding-top: 24px; border-top: 1px solid #d4e3ee; }
+.store-details a, .store-details p { display: flex; gap: 12px; align-items: center; font-size: 12px; line-height: 1.7; }
+.store-details svg { flex-shrink: 0; color: rgb(var(--brand-accent)); }
+.store-directions { display: flex; align-items: center; gap: 12px; border-radius: 10px; background: white; border: 1px solid #bdcfdf; padding: 15px 18px; font-size: 12px; font-weight: 600; transition: background .2s; }
+.store-directions:hover { background: #dceefb; }
+.page-banner { position: relative; overflow: hidden; border-bottom: 1px solid #dce8f1; background: linear-gradient(115deg,#edf6fc,#f8fbfe); }
+.page-banner::after { content: ''; position: absolute; right: -45px; top: -150px; width: 480px; height: 480px; border: 75px solid #0e71b807; border-radius: 50%; pointer-events: none; }
+.page-banner > div { position: relative; z-index: 1; }
+
+@media (max-width: 767px) { .store-location { grid-template-columns: 1fr; gap: 30px; } .store-copy { padding-left: 0; } .store-address-card { padding: 26px; } }

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: 'Visagismo IA' };
 
 export default function VisagismoPage() {
   return <>
-    <section className="relative overflow-hidden bg-primary text-white">
+    <section className="visagismo-intro relative overflow-hidden bg-primary text-white">
       <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full border-[70px] border-accent/10" />
       <div className="container-wide relative grid gap-10 py-16 lg:grid-cols-[1.2fr_.8fr] lg:items-center lg:py-20">
         <div>

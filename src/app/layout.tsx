@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { siteConfig } from '@/lib/site-config';
 
 export const metadata: Metadata = {
-  title: { default: `${siteConfig.name} | Seu olhar. Suas regras.`, template: `%s | ${siteConfig.name}` },
+  title: { default: `${siteConfig.name} | Óculos de grau e de sol em Varginha, MG`, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
 };
 

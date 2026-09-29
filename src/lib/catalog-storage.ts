@@ -18,7 +18,7 @@ function isProduct(value: unknown): value is Product {
 }
 function validateCatalog(value: unknown): Product[] {
   if (!Array.isArray(value) || !value.every(isProduct) || new Set(value.map(p => p.id)).size !== value.length) throw new Error('Catálogo inválido. Confira os campos dos produtos, os preços e os identificadores duplicados.');
-  return value.map(p => ({ ...p, brand: p.brand === 'Coleção Fábio' ? siteConfig.collectionName : p.brand }));
+  return value.map(p => ({ ...p, brand: ['Coleção Fábio', 'Coleção Inovação', 'Coleção Sul'].includes(p.brand) ? siteConfig.collectionName : p.brand }));
 }
 export function loadCatalog(): Product[] {
   if (typeof window === 'undefined') return defaultProducts;

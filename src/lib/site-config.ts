@@ -1,4 +1,4 @@
-/** Identidade e campanha: altere aqui sem refazer os componentes. */
+/** Dados da loja fornecidos na referência. Horários completos ainda não informados. */
 export const siteConfig = {
   name: 'sua-marca',
   description: 'Um novo jeito de se ver. Armações com personalidade, curadoria de estilo e atendimento próximo na sua-marca.',
@@ -16,9 +16,13 @@ export const siteConfig = {
   contact: {
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5535998892492',
     phoneLabel: '(35) 99889-2492',
-    // Preencha com os dados reais antes de publicar. Campos vazios não aparecem.
-    address: '',
-    hours: '',
+    phoneHref: 'tel:+5535998892492',
+    address: 'Rua Alves e Silva, 61 — Centro, Varginha - MG',
+    street: 'Rua Alves e Silva, 61',
+    city: 'Centro · Varginha, MG',
+    postalCode: '37002-190',
+    hours: 'Consulte o horário de atendimento pelo WhatsApp.',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Rua Alves e Silva, 61, Centro, Varginha, MG, 37002-190'),
     instagramUrl: '',
     instagramLabel: '',
   },
