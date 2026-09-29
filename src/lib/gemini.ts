@@ -202,7 +202,7 @@ export async function analyzeWithHuggingFace(imageDataUrl: string): Promise<Face
   const model = process.env.HUGGINGFACE_MODEL || 'meta-llama/Llama-3.2-11B-Vision-Instruct';
 
   const prompt = [
-    'Você é um consultor de visagismo ótico para a Fábio Ótica.',
+    'Você é um consultor de visagismo ótico para a sua-marca.',
     'Analise o formato do rosto na foto e selecione 3 armações com formatos distintos do catálogo abaixo.',
     'Catálogo disponível: ' + JSON.stringify(catalog),
     'Responda EXCLUSIVAMENTE em formato JSON puro, sem blocos markdown, com o formato:',
@@ -260,7 +260,7 @@ export async function analyzeWithNvidia(imageDataUrl: string): Promise<FaceAnaly
   const model = process.env.NVIDIA_MODEL || 'meta/llama-3.2-11b-vision-instruct';
 
   const prompt = [
-    'Você é um consultor especialista em visagismo ótico para a Fábio Ótica.',
+    'Você é um consultor especialista em visagismo ótico para a sua-marca.',
     'Analise anatomicamente o contorno facial da pessoa nesta foto e selecione exatamente 3 armações com formatos diferentes do catálogo a seguir que valorizem esses traços.',
     'Catálogo disponível: ' + JSON.stringify(catalog),
     'Responda EXCLUSIVAMENTE em formato JSON puro, sem blocos markdown e sem textos adicionais, com a seguinte estrutura:',

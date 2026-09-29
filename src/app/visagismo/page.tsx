@@ -12,8 +12,8 @@ export default function VisagismoPage() {
         <div>
           <span className="eyebrow"><Sparkles size={15} /> VISAGISMO POR IA</span>
           <h1 className="mt-5 max-w-2xl text-[clamp(2.7rem,5vw,5rem)] font-semibold leading-[1.09] tracking-[-.05em]">O óculos ideal começa <span className="font-serif italic font-normal text-accent">com você.</span></h1>
-          <p className="mt-6 max-w-xl text-sm leading-8 text-white/70 sm:text-base">Uma foto, novas possibilidades. Receba sugestões de formatos que podem valorizar seus traços e descubra peças para experimentar na Fábio Ótica.</p>
-          <a href="#experimente" className="btn-primary mt-8">Começar agora <ArrowDown size={18} /></a>
+          <p className="mt-6 max-w-xl text-sm leading-8 text-white/70 sm:text-base">Uma foto, novas possibilidades. Receba sugestões de formatos que podem valorizar seus traços e descubra peças para experimentar na sua-marca.</p>
+          <a href="#experimente" className="btn-highlight mt-8">Começar agora <ArrowDown size={18} /></a>
         </div>
         <div className="hidden justify-self-end rounded-[2rem] border border-white/15 bg-white/5 p-10 backdrop-blur md:block shadow-2xl">
           <div className="flex h-60 w-60 items-center justify-center rounded-full border border-accent/40">

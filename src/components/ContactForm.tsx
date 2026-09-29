@@ -11,7 +11,7 @@ export function ContactForm() {
   function update<K extends keyof ContactLead>(key: K, value: ContactLead[K]) { setForm(prev => ({ ...prev, [key]: value })); }
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const text = `Olá, Fábio Ótica! Meu nome é ${form.name}. ${form.message}\nMeu telefone: ${form.phone}${form.email ? `\nE-mail: ${form.email}` : ''}`;
+    const text = `Olá, sua-marca! Meu nome é ${form.name}. ${form.message}\nMeu telefone: ${form.phone}${form.email ? `\nE-mail: ${form.email}` : ''}`;
     window.open(whatsappUrl(text), '_blank', 'noopener,noreferrer');
   }
   const cls = 'w-full rounded-xl border border-primary/10 bg-white px-4 py-3.5 text-sm text-primary outline-none transition placeholder:text-primary/35 focus:border-accent focus:ring-2 focus:ring-accent/10';

@@ -9,6 +9,6 @@ export function Logo({ light = false, compact = false }: { light?: boolean; comp
       <path d="M24 2v8M24 38v8M2 10l6 5M40 33l6 5" stroke="currentColor" strokeWidth="2" />
       <circle cx="26" cy="22" r="3" fill="currentColor" />
     </svg>
-    <span><span className="block text-[26px] font-semibold leading-none tracking-[-.065em]">fábio<span className={light ? 'text-highlight' : 'text-accent'}>.</span></span><span className="mt-1.5 block text-[9px] font-medium uppercase tracking-[.52em]">Ó T I C A</span></span>
+    <span><span className="block whitespace-nowrap text-[26px] font-semibold leading-none tracking-[-.065em]">{siteConfig.name}<span className={light ? 'text-highlight' : 'text-accent'}>.</span></span><span className="mt-2 block text-[8px] font-medium uppercase tracking-[.32em]">Ótica · um novo olhar</span></span>
   </Link>;
 }

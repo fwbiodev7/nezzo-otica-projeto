@@ -136,7 +136,7 @@ export default function AdminSecretoPage() {
   function handleResetDefault() {
     if (
       confirm(
-        'ATENÇÃO: Deseja restaurar o catálogo para as 18 armações originais da Fábio Ótica? Modelos criados por você serão excluídos.'
+        'ATENÇÃO: Deseja restaurar o catálogo para as 18 armações originais da sua-marca? Modelos criados por você serão excluídos.'
       )
     ) {
       try { resetCatalogToDefault(); } catch (error) { showToast(error instanceof Error ? error.message : "Falha ao restaurar."); return; }
@@ -151,7 +151,7 @@ export default function AdminSecretoPage() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `fabio_otica_catalogo_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = `sua_marca_catalogo_backup_${new Date().toISOString().slice(0, 10)}.json`;
       link.click();
       URL.revokeObjectURL(url);
       showToast('Arquivo de backup baixado com sucesso!');
@@ -206,7 +206,7 @@ export default function AdminSecretoPage() {
       <div className="min-h-screen bg-primary text-white flex flex-col justify-between p-4 sm:p-8">
         <header className="flex items-center justify-between">
           <Link href="/" className="font-sans text-xl font-black tracking-[-.04em] text-white">
-            FÁBIO <span className="text-highlight">ÓTICA</span>
+            sua-<span className="text-highlight">marca</span>
           </Link>
           <Link
             href="/"
@@ -298,7 +298,7 @@ export default function AdminSecretoPage() {
         </main>
 
         <footer className="text-center text-xs text-white/40">
-          Fábio Ótica · Editor de demonstração local
+          sua-marca · Editor de demonstração local
         </footer>
       </div>
     );
@@ -321,7 +321,7 @@ export default function AdminSecretoPage() {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2 group">
               <span className="font-sans text-xl font-black tracking-[-.04em] text-primary">
-                FÁBIO <span className="text-accent">ÓTICA</span>
+                sua-<span className="text-accent">marca</span>
               </span>
             </Link>
             <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-800">
@@ -615,7 +615,7 @@ export default function AdminSecretoPage() {
         <section className="rounded-2xl border border-primary/10 bg-white p-6 shadow-soft">
           <div className="flex items-center gap-2 text-primary font-bold text-base mb-3">
             <Sparkles size={18} className="text-accent" />
-            <span>Guia Rápido para a Equipe Fábio Ótica</span>
+            <span>Guia Rápido para a Equipe sua-marca</span>
           </div>
           <div className="grid gap-4 sm:grid-cols-3 text-xs text-ink/75 leading-5">
             <div className="rounded-xl bg-light p-4">

@@ -1,4 +1,4 @@
-# Guia de uso da Fábio Ótica
+# Guia de uso da sua-marca
 
 ## Explorar os modelos
 

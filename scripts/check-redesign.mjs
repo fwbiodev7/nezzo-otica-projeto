@@ -8,7 +8,7 @@ const page=await browser.newPage({viewport:{width:1440,height:1000}});
 const errors=[]; page.on('pageerror',e=>errors.push(e.message));
 try {
  await page.goto(base,{waitUntil:'networkidle'});
- assert.match(await page.title(),/Fábio Ótica/);
+ assert.match(await page.title(),/sua-marca/);
  for(const section of await page.locator('.reveal-ready').all()) { await section.scrollIntoViewIfNeeded(); await page.waitForTimeout(950); }
  await page.evaluate(()=>window.scrollTo(0,0)); await page.waitForTimeout(300);
  await page.screenshot({path:'artifacts/home-desktop.png',fullPage:true});

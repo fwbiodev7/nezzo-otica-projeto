@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Plus, X, Upload, Check, Sparkles, Edit3 } from 'lucide-react';
 import type { FrameShape, Product, ProductCategory } from '@/types';
+import { siteConfig } from '@/lib/site-config';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ export function AddProductModal(props: AddProductModalProps) {
 
 function ProductModalForm({ isOpen, onClose, onAddProduct, productToEdit }: AddProductModalProps) {
   const [name, setName] = useState(productToEdit?.name ?? '');
-  const [brand, setBrand] = useState(productToEdit?.brand ?? 'Coleção Fábio');
+  const [brand, setBrand] = useState(productToEdit?.brand ?? siteConfig.collectionName);
   const [price, setPrice] = useState(productToEdit?.price.toString() ?? '399');
   const [category, setCategory] = useState<ProductCategory>(productToEdit?.category ?? 'Grau');
   const [frameShape, setFrameShape] = useState<FrameShape>(productToEdit?.frameShape ?? 'Redondo');
@@ -47,7 +48,7 @@ function ProductModalForm({ isOpen, onClose, onAddProduct, productToEdit }: AddP
   function resetForm() {
     setError('');
     setName('');
-    setBrand('Coleção Fábio');
+    setBrand(siteConfig.collectionName);
     setPrice('399');
     setCategory('Grau');
     setFrameShape('Redondo');
@@ -95,7 +96,7 @@ function ProductModalForm({ isOpen, onClose, onAddProduct, productToEdit }: AddP
     const productData: Product = {
       id: productToEdit ? productToEdit.id : 'custom-' + crypto.randomUUID(),
       name: name.trim(),
-      brand: brand.trim() || 'Coleção Fábio',
+      brand: brand.trim() || siteConfig.collectionName,
       price: amount,
       image,
       category,
@@ -170,7 +171,7 @@ function ProductModalForm({ isOpen, onClose, onAddProduct, productToEdit }: AddP
                 id="product-brand"
                 value={brand}
                 onChange={e => setBrand(e.target.value)}
-                placeholder="Ex: Coleção Fábio, Ray-Ban..."
+                placeholder={`Ex: ${siteConfig.collectionName}, Ray-Ban...`}
                 className="w-full rounded-xl border border-primary/15 bg-light/40 px-3.5 py-2.5 text-sm font-semibold text-primary outline-none focus:border-accent focus:bg-white transition"
               />
             </div>

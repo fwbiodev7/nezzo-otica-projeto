@@ -69,6 +69,6 @@ try {
 } finally {
   const video = page.video();
   await context.close();
-  if (video) { await video.saveAs(path.join(output, 'fabio-otica-demo.webm')); console.log('Video: artifacts/fabio-otica-demo.webm'); }
+  if (video) { await video.saveAs(path.join(output, 'sua-marca-demo.webm')); console.log('Video: artifacts/sua-marca-demo.webm'); }
   await browser.close();
 }

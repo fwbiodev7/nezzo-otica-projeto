@@ -1,8 +1,8 @@
 /** Identidade e campanha: altere aqui sem refazer os componentes. */
 export const siteConfig = {
-  name: 'Fábio Ótica',
-  description: 'Um novo jeito de se ver. Armações com personalidade, curadoria de estilo e atendimento próximo na Fábio Ótica.',
-  collectionName: 'Coleção Fábio',
+  name: 'sua-marca',
+  description: 'Um novo jeito de se ver. Armações com personalidade, curadoria de estilo e atendimento próximo na sua-marca.',
+  collectionName: 'Coleção sua-marca',
   announcement: 'Um novo olhar para cada versão de você.',
   campaign: {
     label: 'OLHE DIFERENTE. SEJA VOCÊ.',
