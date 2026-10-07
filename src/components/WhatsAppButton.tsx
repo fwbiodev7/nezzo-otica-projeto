@@ -1,11 +1,10 @@
-import { ArrowUpRight, MessageCircle } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { whatsappUrl } from '@/lib/mock-data';
 
 export function WhatsAppButton({
   message,
   children,
   className = '',
-  outline = false,
 }: {
   message?: string;
   children?: React.ReactNode;
@@ -17,11 +16,14 @@ export function WhatsAppButton({
       href={whatsappUrl(message)}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${outline ? 'btn-outline' : 'btn-olive shadow-olive-glow'} group ${className}`}
+      id="whatsapp-cta"
+      className={`btn btn-gold group shrink-0 ${className}`}
     >
-      <MessageCircle size={18} strokeWidth={2} className="text-gold transition-transform group-hover:scale-110" />
       <span>{children || 'Falar no WhatsApp'}</span>
-      <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-0.5" />
+      <ArrowUpRight
+        size={16}
+        className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+      />
     </a>
   );
 }

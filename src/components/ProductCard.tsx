@@ -64,7 +64,7 @@ export function ProductCard({
             {product.category === 'Grau' ? 'Armação de Grau' : 'Óculos de Sol'}
           </span>
           {product.size && (
-            <span className="absolute top-3.5 right-3.5 rounded-full bg-paper/90 px-2 py-0.5 text-[9px] font-bold text-accent shadow-sm border border-sand">
+            <span className="absolute top-3.5 right-3.5 rounded-full bg-void/80 px-2 py-0.5 text-2xs font-bold text-gold border border-gold/20 backdrop-blur-sm">
               Tam. {product.size}
             </span>
           )}
@@ -75,21 +75,21 @@ export function ProductCard({
 
         <div className="pt-4 pb-2">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-accent">
+            <p className="text-2xs font-bold uppercase tracking-[0.18em] text-gold/80">
               {product.brand}
             </p>
             {product.featured && (
-              <span className="inline-flex items-center gap-1 text-[9px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">
+              <span className="inline-flex items-center gap-1 text-2xs font-bold text-amber px-2 py-0.5 rounded-full bg-amber/10 border border-amber/20">
                 <Sparkles size={10} /> Destaque
               </span>
             )}
           </div>
 
-          <h3 className="mt-1 text-[16px] font-semibold tracking-tight text-primary group-hover:text-accent transition-colors">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-cream group-hover:text-gold transition-colors">
             {product.name}
           </h3>
 
-          <p className="mt-1 text-xs text-ink/60">
+          <p className="mt-1 text-xs text-muted">
             Formato {product.frameShape} · {product.color}
           </p>
 
@@ -98,7 +98,7 @@ export function ProductCard({
               {product.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="rounded bg-sand/50 px-2 py-0.5 text-[10px] text-ink/75"
+                  className="rounded-full border border-mid bg-dark px-2.5 py-0.5 text-2xs text-muted"
                 >
                   {tag}
                 </span>
@@ -108,10 +108,10 @@ export function ProductCard({
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-3 border-t border-sand pt-3">
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-mid pt-3">
         <div>
-          <span className="block text-[10px] uppercase tracking-wider text-ink/45">Investimento</span>
-          <span className="text-[14px] font-bold text-primary">
+          <span className="block text-2xs uppercase tracking-wider text-muted">Investimento</span>
+          <span className="text-sm font-semibold text-gold">
             {money.format(product.price)}
           </span>
         </div>
@@ -121,7 +121,7 @@ export function ProductCard({
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleWhatsAppClick}
-          className="inline-flex items-center gap-1.5 rounded-full bg-light px-3.5 py-1.5 text-[11px] font-semibold text-primary transition-all hover:bg-accent hover:text-[#FAF8F5]"
+          className="inline-flex items-center gap-1.5 rounded-full bg-dark border border-mid px-3.5 py-1.5 text-2xs font-semibold text-soft transition-all hover:bg-gold hover:border-gold hover:text-void"
         >
           <MessageCircle size={13} />
           <span>Experimentar</span>

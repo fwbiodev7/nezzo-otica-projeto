@@ -1,88 +1,100 @@
 import Link from 'next/link';
-import { ArrowUpRight, Instagram, MapPin, MessageCircle, Phone, ShieldCheck } from 'lucide-react';
-import { Logo } from './Logo';
+import { ArrowUpRight, Eye, Instagram, MapPin, MessageCircle, Phone, Shield } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 import { whatsappUrl } from '@/lib/mock-data';
 
+const LINKS = [
+  { label: 'Catálogo de Óculos', href: '/catalogo' },
+  { label: 'Visagista IA 2.0', href: '/visagismo' },
+  { label: 'Sobre a Nezzo', href: '/sobre' },
+  { label: 'Localização & Contato', href: '/contato' },
+];
+
 export function Footer() {
   const { contact } = siteConfig;
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-[#FAF8F5] border-t border-white/10">
-      <div className="container-wide grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1.2fr]">
-        {/* Coluna 1: Marca & Missão */}
+    <footer className="border-t border-mid bg-void">
+      <div className="container-wide grid gap-14 py-16 md:grid-cols-[1.5fr_1fr_1.3fr]">
+
+        {/* Coluna 1: Marca */}
         <div>
-          <Logo light compact={false} showTagline={true} />
-          <p className="mt-5 max-w-sm text-sm leading-7 text-[#FAF8F5]/75">
-            Sua visão com personalidade. Curadoria de armações, lentes de alta tecnologia e laboratório especializado no Centro de Varginha - MG.
+          <Link href="/" className="flex items-center gap-3 group w-fit">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gold/25 bg-gold/10 text-gold transition-all group-hover:bg-gold group-hover:text-void">
+              <Eye size={20} strokeWidth={1.5} />
+            </div>
+            <div>
+              <span className="block text-base font-semibold tracking-[0.1em] text-cream uppercase">ÓTICA NEZZO</span>
+              <span className="block text-2xs tracking-[0.12em] text-soft mt-0.5">Varginha · MG</span>
+            </div>
+          </Link>
+
+          <p className="mt-6 max-w-xs text-sm leading-7 text-soft">
+            Sua visão com personalidade. Curadoria de armações internacionais, lentes de alta tecnologia e laboratório especializado.
           </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+
+          <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-[#FAF8F5] transition hover:bg-white hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-2xs font-bold uppercase tracking-[0.1em] text-void transition-all hover:bg-gold-light hover:shadow-glow"
             >
-              <MessageCircle size={15} /> WhatsApp Oficial
+              <MessageCircle size={13} /> WhatsApp
             </a>
             <a
               href={contact.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-[#FAF8F5] transition hover:border-white hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-full border border-mid px-4 py-2 text-2xs font-semibold text-soft transition hover:border-gold/40 hover:text-gold"
             >
-              <Instagram size={15} /> {contact.instagramLabel}
+              <Instagram size={13} /> {contact.instagramLabel}
             </a>
           </div>
         </div>
 
-        {/* Coluna 2: Navegação & Recursos */}
+        {/* Coluna 2: Navegação */}
         <div>
-          <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-highlight">
+          <h3 className="mb-5 text-2xs font-bold uppercase tracking-[0.22em] text-gold">
             Navegação
           </h3>
-          <ul className="space-y-3 text-sm text-[#FAF8F5]/80">
-            <li>
-              <Link href="/catalogo" className="transition hover:text-white flex items-center gap-1.5">
-                Catálogo de Óculos <ArrowUpRight size={14} className="opacity-60" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/visagismo" className="transition hover:text-white flex items-center gap-1.5">
-                Visagista IA 2.0 <ArrowUpRight size={14} className="opacity-60" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/sobre" className="transition hover:text-white flex items-center gap-1.5">
-                Sobre a Ótica Nezzo <ArrowUpRight size={14} className="opacity-60" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/contato" className="transition hover:text-white flex items-center gap-1.5">
-                Localização & Contato <ArrowUpRight size={14} className="opacity-60" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin" className="transition hover:text-white text-xs opacity-50 flex items-center gap-1 pt-2">
-                <ShieldCheck size={13} /> Área Administrativa
+          <ul className="space-y-3">
+            {LINKS.map(({ label, href }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className="flex items-center gap-1.5 text-sm text-soft transition hover:text-cream group"
+                >
+                  <span>{label}</span>
+                  <ArrowUpRight size={13} className="opacity-0 -translate-x-1 transition-all group-hover:opacity-60 group-hover:translate-x-0" />
+                </Link>
+              </li>
+            ))}
+            <li className="pt-3 border-t border-mid">
+              <Link
+                href="/admin"
+                className="flex items-center gap-1.5 text-xs text-muted transition hover:text-soft"
+              >
+                <Shield size={12} /> Área Administrativa
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Coluna 3: Visite nossa Loja */}
+        {/* Coluna 3: Endereço */}
         <div>
-          <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-highlight">
-            Visite Nossa Loja
+          <h3 className="mb-5 text-2xs font-bold uppercase tracking-[0.22em] text-gold">
+            Visite nossa loja
           </h3>
-          <div className="space-y-4 text-sm text-[#FAF8F5]/80">
+          <div className="space-y-4 text-sm text-soft">
             <a
               href={contact.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start gap-3 transition hover:text-white group"
+              className="flex items-start gap-3 transition hover:text-cream group"
             >
-              <MapPin size={18} className="mt-1 shrink-0 text-highlight group-hover:scale-110 transition-transform" />
+              <MapPin size={17} className="mt-0.5 shrink-0 text-gold/70 group-hover:text-gold transition-colors" />
               <span className="leading-relaxed">
                 {contact.street}<br />
                 {contact.city} · CEP {contact.postalCode}
@@ -91,28 +103,24 @@ export function Footer() {
 
             <a
               href={contact.phoneHref}
-              className="flex items-center gap-3 transition hover:text-white"
+              className="flex items-center gap-3 transition hover:text-cream"
             >
-              <Phone size={17} className="text-highlight" />
-              <span>{contact.phoneLabel}</span>
+              <Phone size={15} className="text-gold/70 shrink-0" />
+              {contact.phoneLabel}
             </a>
 
-            <p className="text-xs leading-6 text-[#FAF8F5]/60 pt-2 border-t border-white/10">
-              <strong className="text-[#FAF8F5]/80 block font-medium">Horário de Atendimento:</strong>
-              {contact.hours}
-            </p>
+            <div className="rounded-xl border border-mid bg-dark p-4 text-xs leading-6">
+              <span className="block text-xs font-semibold text-cream mb-1 uppercase tracking-wide">Horário de Atendimento</span>
+              <span className="text-muted">{contact.hours}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container-wide border-t border-white/10 py-6">
-        <div className="flex flex-col items-center justify-between gap-4 text-xs text-[#FAF8F5]/60 sm:flex-row">
-          <span>
-            © {new Date().getFullYear()} {siteConfig.name} · Varginha - MG. Todos os direitos reservados.
-          </span>
-          <span className="text-[11px]">
-            Privacidade & LGPD respeitadas · Imagens faciais analisadas localmente
-          </span>
+      <div className="container-wide border-t border-mid py-5">
+        <div className="flex flex-col items-center justify-between gap-3 text-2xs text-muted sm:flex-row">
+          <span>© {year} {siteConfig.name} · Varginha, MG. Todos os direitos reservados.</span>
+          <span>Privacidade & LGPD · Imagens analisadas localmente</span>
         </div>
       </div>
     </footer>
