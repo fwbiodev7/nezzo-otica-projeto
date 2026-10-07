@@ -42,7 +42,9 @@ try {
   await upload();
   await page.getByRole('heading', { name: 'Redondo', exact: true }).waitFor({ timeout: 60_000 });
   assert.equal(analysisRequests, 0, 'Análise no aparelho não envia a foto à nuvem');
-  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 1);
+  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 0, 'Não desenha uma armação sobre o rosto');
+  await page.getByAltText('Sua foto original', { exact: true }).waitFor();
+  assert.equal(tryonRequests, 0, 'Geração é solicitada somente ao clicar');
   assert(!/Tamanho [PMG]|Aros entre|Aros a partir/.test(await page.locator('#experimente').textContent()));
   assert.equal(await page.locator('#recomendados img').count(), 3);
   assert.match(await page.locator('#melhor-armacao').textContent(), /NZ Vision Azul/);
@@ -50,24 +52,29 @@ try {
   const originalFrame = await page.locator('#melhor-armacao img').getAttribute('src');
   assert.match(originalFrame, /nezzo-catalogo-122818/);
   await mkdir('artifacts', { recursive: true });
-  await page.getByRole('region', { name: 'Veja os óculos no seu rosto' }).screenshot({ path: 'artifacts/provador-ilustrativo.png' });
+  await page.getByRole('region', { name: 'Veja os óculos no seu rosto' }).screenshot({ path: 'artifacts/provador-ia.png' });
   const model = page.locator('#tryon-model');
   const ids = await model.locator('option').evaluateAll(options => options.map(option => option.value));
-  await page.getByRole('button', { name: 'Experimentar no meu rosto' }).click();
+  await page.getByRole('button', { name: 'Gerar prévia com IA' }).click();
   await page.getByAltText(/Prévia com/).waitFor();
   assert.equal(tryonRequests, 1);
-  await page.getByRole('button', { name: 'Experimentar no meu rosto' }).click();
+  await page.getByRole('button', { name: 'Comparar com minha foto original' }).click();
+  await page.getByAltText('Sua foto original', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Ver foto com os óculos' }).click();
+  await page.getByAltText(/Prévia com/).waitFor();
+  await page.getByRole('button', { name: 'Gerar prévia com IA' }).click();
   assert.equal(tryonRequests, 1, 'Prévia em cache não repete a chamada de IA');
   await model.selectOption(ids[1]);
   assert.equal(await page.getByAltText(/Prévia com/).count(), 0);
-  await page.getByRole('button', { name: 'Experimentar no meu rosto' }).click();
+  await page.getByRole('button', { name: 'Gerar prévia com IA' }).click();
   await page.getByAltText(/Prévia com/).waitFor();
   assert.equal(tryonRequests, 2);
   tryOnStatus = 503;
   await model.selectOption(ids[2]);
-  await page.getByRole('button', { name: 'Experimentar no meu rosto' }).click();
+  await page.getByRole('button', { name: 'Gerar prévia com IA' }).click();
   await page.getByRole('region', { name: 'Veja os óculos no seu rosto' }).getByRole('alert').waitFor();
-  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 1, 'Prévia local continua funcionando quando a nuvem falha');
+  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 0, 'Falha da nuvem não retorna o desenho removido');
+  await page.getByAltText('Sua foto original', { exact: true }).waitFor();
   tryOnStatus = 200;
   await page.getByRole('button', { name: 'Óculos de sol', exact: true }).click();
   assert.equal(await page.locator('#recomendados img').count(), 3);
@@ -100,9 +107,9 @@ try {
   assert.match(await page.locator('#melhor-armacao').textContent(), /Armação cadastrada na ótica/);
   assert.equal(await page.locator('#recomendados img').count(), 1);
   const requestsBeforeLocalPreview = tryonRequests;
-  await page.getByRole('button', { name: 'Experimentar no meu rosto' }).click();
-  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 1);
-  assert.equal(tryonRequests, requestsBeforeLocalPreview, 'Simulação sem chave funciona sem chamada de geração');
+  assert.equal(await page.getByRole('button', { name: 'Gerar prévia com IA' }).isDisabled(), true);
+  assert.equal(await page.getByRole('img', { name: /Simulação ilustrativa/ }).count(), 0);
+  assert.equal(tryonRequests, requestsBeforeLocalPreview, 'Sem chave, geração fica indisponível sem chamada à nuvem');
   assert(!/Modelo sem estoque|Produto antigo/.test(await page.locator('#recomendados').textContent()));
 
   await page.evaluate(() => localStorage.setItem('oticafabio_catalog_v1', JSON.stringify([{ id: '01', name: 'Nezzo Tartaruga Bold', brand: 'Nezzo Atelier', price: 389, image: '/images/frame-rectangular.png', category: 'Grau', frameShape: 'Quadrado', tags: [], color: 'Tartaruga' }])));
@@ -117,5 +124,5 @@ try {
   await page.screenshot({ path: 'artifacts/catalogo-real.png', fullPage: true });
   assert.deepEqual(errors, []);
   assert.equal(analysisRequests, 0);
-  console.log('OK: IA no aparelho, sem tamanho inventado, preferências, catálogo real, simulação sem chave, cache e erros 400/403. Nenhuma chamada paga.');
+  console.log('OK: análise local, catálogo real, geração por clique, comparação, cache, erro sem desenho e geração desativada sem chave. Nenhuma chamada paga.');
 } finally { await browser.close(); }

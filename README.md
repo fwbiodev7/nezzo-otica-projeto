@@ -65,11 +65,11 @@ Acesse `/admsecreto` e use o código demonstrativo **2000**.
 2. Envie uma foto frontal ou permita a captura pela câmera.
 3. Autorize o uso da foto e clique em **Analisar com IA**.
 4. Escolha grau ou sol e seu estilo preferido; compare as sugestões do catálogo real.
-5. Veja a simulação ilustrativa ou gere uma prévia com Gemini, quando configurado. Consulte a equipe pelo WhatsApp para confirmar o ajuste.
+5. Clique em “Gerar prévia com IA” para criar uma foto com a armação usando Gemini, quando configurado. Compare com a foto original e consulte a equipe pelo WhatsApp para confirmar o ajuste.
 
 O botão único usa MediaPipe no navegador. Quando essa análise funciona, a foto não é enviada à API de análise. Em caso de falha técnica no carregamento do modelo, serviços em nuvem configurados podem ser usados. Fotos sem rosto ou com múltiplos rostos são rejeitadas. O modelo local depende de WebAssembly e do carregamento dos arquivos preparados pelo projeto.
 
-O recurso oferece orientação de estilo, sem identificação pessoal ou diagnóstico. Não estima medidas em milímetros nem o tamanho físico da armação a partir do enquadramento. A simulação local alinha um desenho do formato e da cor aproximados aos olhos; não reproduz todos os detalhes do produto. A prévia em nuvem usa a foto real da armação, pode alterar detalhes e só é solicitada ao clicar em gerar. Fotos e prévias ficam na sessão e são removidas ao reiniciar. Os modelos do catálogo vieram de prints fornecidos e de uma publicação pública da ótica; preços e estoque atual exigem confirmação.
+O recurso oferece orientação de estilo, sem identificação pessoal ou diagnóstico. Não estima medidas em milímetros nem o tamanho físico da armação a partir do enquadramento. O provador usa Gemini com a foto do rosto e a foto real da armação; não sobrepõe um desenho. A geração pode alterar detalhes e só é solicitada ao clicar em gerar. Sem chave, a geração fica desativada e as recomendações continuam disponíveis. Fotos e prévias ficam na sessão e são removidas ao reiniciar. Os modelos do catálogo vieram de prints fornecidos e de uma publicação pública da ótica; preços e estoque atual exigem confirmação.
 
 ### Integrações opcionais
 
@@ -89,6 +89,8 @@ As integrações dependem das credenciais, cotas, modelos e termos dos respectiv
 As chaves privadas não devem usar o prefixo `NEXT_PUBLIC_` nem ser enviadas ao Git. Antes de habilitar o fluxo em nuvem para visitantes, documente provedores, finalidade, retenção, base legal, aviso de privacidade e autorizações aplicáveis. Não se presume descarte imediato da imagem por serviços externos.
 
 `node --env-file=.env.local scripts/check-gemini-key.mjs` verifica a conexão com uma resposta curta e sem exibir a chave. `npm run test:provador` simula as chamadas de geração, sem enviar fotos à nuvem. O teste opcional `scripts/test-gemini-live.mjs` envia a foto de teste `scripts/fixtures/face-round.png` e a referência da armação NZ Vision Azul ao Gemini; execute somente após autorizar esse envio. Pode consumir a cota do provedor.
+
+Na Vercel, adicione `GEMINI_API_KEY` como variável **Secret** em **Settings → Environment Variables**, no ambiente **Production** (e **Preview** se necessário). Configure também `GEMINI_MODEL=gemini-3.5-flash-lite` e `GEMINI_IMAGE_MODEL=gemini-3.1-flash-image` como **Config** se quiser explicitar os modelos. Salve e faça um novo deploy. `.env.local` fica apenas no computador e não é publicado pelo Git. As chamadas ao Gemini partem do servidor; a chave não usa o prefixo `NEXT_PUBLIC_`.
 
 ## Verificar a aplicação
 

@@ -38,7 +38,9 @@ export async function POST(request: Request) {
     const image = response.candidates?.[0]?.content?.parts?.find(part => part.inlineData?.mimeType?.startsWith('image/'))?.inlineData;
     if (!image?.data) return reply('A IA não conseguiu montar esta prévia. Tente outra foto frontal ou outro modelo.', 502);
     return NextResponse.json({ image: `data:${image.mimeType};base64,${image.data}` }, { headers });
-  } catch {
+  } catch (error) {
+    const status = Number((error as { status?: unknown })?.status);
+    if (status === 429) return reply('O serviço de IA atingiu seu limite de uso. Tente novamente mais tarde.', 429);
     return reply('O provador está temporariamente indisponível. Tente novamente em instantes.', 503);
   }
 }
