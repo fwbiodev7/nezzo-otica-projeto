@@ -40,15 +40,6 @@ export interface FaceAnalysisResult {
   metrics?: FaceMetrics;
   recommendedProducts: Array<{ productId: string; reason: string }>;
   suggestedSize?: FrameSize;
-  placement?: FacePlacement;
-}
-
-export interface FacePlacement {
-  centerX: number;
-  centerY: number;
-  width: number;
-  rotation: number;
-  imageAspectRatio: number;
 }
 
 export interface ContactLead {

@@ -7,7 +7,6 @@ export const runtime = 'nodejs';
 export function GET() {
   return NextResponse.json({
     cloudAnalysis: Boolean(process.env.GEMINI_API_KEY || process.env.HUGGINGFACE_API_KEY || process.env.NVIDIA_API_KEY),
-    cloudTryOn: Boolean(process.env.GEMINI_API_KEY),
   }, { headers: { 'Cache-Control': 'no-store' } });
 }
 

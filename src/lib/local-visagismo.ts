@@ -169,13 +169,6 @@ export async function analyzeFaceLocally(imageDataUrl: string, catalog: Product[
     description: `O contorno aparente é ${shape.toLowerCase()}. Usamos as proporções observadas na sua foto para sugerir armações que valorizem seus traços.`,
     styleAdvice: pick.advice,
     metrics,
-    placement: {
-      centerX: (result.faceLandmarks[0][33].x + result.faceLandmarks[0][263].x) / 2,
-      centerY: (result.faceLandmarks[0][33].y + result.faceLandmarks[0][263].y) / 2,
-      width: Math.abs(result.faceLandmarks[0][454].x - result.faceLandmarks[0][234].x) * 1.05,
-      rotation: Math.atan2((result.faceLandmarks[0][263].y - result.faceLandmarks[0][33].y) * photo.naturalHeight, (result.faceLandmarks[0][263].x - result.faceLandmarks[0][33].x) * photo.naturalWidth) * 180 / Math.PI,
-      imageAspectRatio: photo.naturalWidth / photo.naturalHeight,
-    },
     recommendedProducts,
     recommendedFrameShapes,
   };

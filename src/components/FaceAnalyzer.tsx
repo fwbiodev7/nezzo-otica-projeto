@@ -28,7 +28,7 @@ export function FaceAnalyzer() {
   const [error, setError] = useState('');
   const [cameraOpen, setCameraOpen] = useState(false);
   const [lgpdAccepted, setLgpdAccepted] = useState(false);
-  const [capabilities, setCapabilities] = useState({ cloudAnalysis: false, cloudTryOn: false });
+  const [capabilities, setCapabilities] = useState({ cloudAnalysis: false });
 
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -45,7 +45,7 @@ export function FaceAnalyzer() {
     const controller = new AbortController();
     fetch('/api/visagismo', { signal: controller.signal })
       .then(response => response.ok ? response.json() : null)
-      .then(data => { if (data && !controller.signal.aborted) setCapabilities({ cloudAnalysis: data.cloudAnalysis === true, cloudTryOn: data.cloudTryOn === true }); })
+      .then(data => { if (data && !controller.signal.aborted) setCapabilities({ cloudAnalysis: data.cloudAnalysis === true }); })
       .catch(() => { /* A análise no aparelho continua disponível. */ });
     return () => controller.abort();
   }, []);
@@ -217,7 +217,7 @@ export function FaceAnalyzer() {
       </div>
 
       {stage === 'result' && result ? (
-        <FaceResult result={result} image={image!} cloudTryOn={capabilities.cloudTryOn} onRestart={restart} />
+        <FaceResult result={result} onRestart={restart} />
       ) : (
         <div className="mx-auto max-w-3xl rounded-3xl border border-sand bg-paper p-6 sm:p-10 shadow-xl">
           {stage === 'upload' && (
@@ -306,7 +306,7 @@ export function FaceAnalyzer() {
                     className="mt-1 h-4 w-4 rounded border-accent text-accent focus:ring-accent"
                   />
                   <span className="text-xs text-ink/75 leading-relaxed">
-                    <strong>Privacidade:</strong> Autorizo o uso da foto para análise de estilo e, se solicitado, para o provador virtual. Serviços de IA em nuvem podem processar a foto; quando indisponíveis, a análise acontece no aparelho. A foto permanece nesta sessão para o provador e é removida ao iniciar uma nova análise.
+                    <strong>Privacidade:</strong> Autorizo o uso da foto para análise de estilo. A análise acontece preferencialmente no aparelho; em caso de falha técnica, serviços de IA em nuvem configurados podem processar a foto. A foto permanece nesta sessão e é removida ao iniciar uma nova análise.
                   </span>
                 </label>
               </div>
@@ -346,7 +346,7 @@ export function FaceAnalyzer() {
 
               <label className="mx-auto mt-5 flex max-w-sm items-start gap-2 text-xs leading-relaxed text-primary">
                 <input type="checkbox" checked={lgpdAccepted} onChange={event => setLgpdAccepted(event.target.checked)} className="mt-0.5" aria-label="Autorizar análise da foto" />
-                Autorizo a análise de estilo desta foto e seu uso no provador. Posso apagar a foto ao iniciar uma nova análise.
+                  Autorizo a análise de estilo desta foto. Posso apagar a foto ao iniciar uma nova análise.
               </label>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <button
@@ -361,7 +361,7 @@ export function FaceAnalyzer() {
               </div>
 
               <p className="mt-6 text-center text-xs text-ink/60 max-w-md mx-auto leading-relaxed">
-                A análise acontece no seu aparelho. Depois, personalize suas sugestões e veja uma prévia da armação no rosto.
+                A análise acontece no seu aparelho. Depois, personalize suas sugestões e compare as fotos dos modelos do catálogo.
               </p>
             </>
           )}

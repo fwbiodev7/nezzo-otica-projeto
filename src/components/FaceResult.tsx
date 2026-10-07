@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import type { FaceAnalysisResult, Product } from '@/types';
 import { useCatalog } from '@/lib/use-catalog';
-import { VirtualTryOn } from './VirtualTryOn';
 import { CatalogPhoto } from './CatalogPhoto';
 import { recommendCatalogFrames, type FramePreferences } from '@/lib/frame-recommendations';
 import { trackEvent } from '@/lib/analytics';
@@ -23,13 +22,9 @@ import { whatsappUrl } from '@/lib/mock-data';
 
 export function FaceResult({
   result,
-  image,
-  cloudTryOn = false,
   onRestart,
 }: {
   result: FaceAnalysisResult;
-  image: string;
-  cloudTryOn?: boolean;
   onRestart: () => void;
 }) {
   const products = useCatalog();
@@ -157,7 +152,7 @@ export function FaceResult({
                       <strong className="mt-1 block text-lg font-bold text-accent">
                         {result.metrics.isFrontal ? 'Frontal' : 'Leve inclinação'}
                       </strong>
-                      <span className="text-[10px] text-ink/60">Referência para a simulação</span>
+                      <span className="text-[10px] text-ink/60">Qualidade do enquadramento</span>
                     </div>
                   </div>
                 </div>
@@ -234,7 +229,6 @@ export function FaceResult({
         </div>
       </div>
 
-      <VirtualTryOn image={image} placement={result.placement} cloudAvailable={cloudTryOn} products={[...chosen.map(item => item.product), ...products.filter(product => product.inStock !== false && (preferences.category === 'Todos' || product.category === preferences.category) && !chosen.some(item => item.product.id === product.id))]} />
 
       {/* 2. Ranking de Armações Compatíveis do Catálogo Nezzo */}
       <div id="recomendados" className="scroll-mt-28">

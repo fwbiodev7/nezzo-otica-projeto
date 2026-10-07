@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 const base = process.env.DEMO_BASE_URL || 'http://localhost:3000';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage();
-await page.route('**/api/visagismo', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ cloudAnalysis: false, cloudTryOn: false }) }));
+await page.route('**/api/visagismo', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ cloudAnalysis: false }) }));
 const cases = [
   ['face-round.png', 'redondo'],
   ['face-square.png', 'quadrado'],
@@ -42,7 +42,7 @@ try {
 
   let apiRequests = 0;
   await page.route('**/api/visagismo', async route => {
-    if (route.request().method() === 'GET') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ cloudAnalysis: false, cloudTryOn: false }) });
+    if (route.request().method() === 'GET') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ cloudAnalysis: false }) });
     apiRequests++;
     await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Cota esgotada' }) });
   });

@@ -88,7 +88,7 @@ try {
  const external=await page.request.post(base+'/api/visagismo',{headers:{Origin:'https://untrusted.vercel.app'},data:{image:'bad'}});assert.equal(external.status(),403);
  console.log('Validação de entrada e bloqueio de origem externa: OK');
  await page.route('**/api/visagismo', route => route.request().method() === 'GET'
-  ? route.fulfill({contentType:'application/json',body:JSON.stringify({cloudAnalysis:false,cloudTryOn:false})})
+  ? route.fulfill({contentType:'application/json',body:JSON.stringify({cloudAnalysis:false})})
   : route.abort());
  await page.goto(base+'/visagismo');
  await page.locator('input[type=file]').setInputFiles('public/images/frame-champagne.png');

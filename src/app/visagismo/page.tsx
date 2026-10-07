@@ -32,7 +32,7 @@ export default function VisagismoPage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-[#FAF8F5]/80">
-              Descubra modelos do catálogo Nezzo que valorizam seus traços e combinam com seu estilo. Escolha entre grau e sol, compare as sugestões e veja uma prévia no seu rosto.
+              Descubra modelos do catálogo Nezzo que valorizam seus traços e combinam com seu estilo. Escolha entre grau e sol, compare as sugestões e converse com nossa equipe.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -41,7 +41,7 @@ export default function VisagismoPage() {
                 <ArrowDown size={16} />
               </a>
               <span className="text-xs text-[#FAF8F5]/60 flex items-center gap-1.5">
-                <Lock size={13} className="text-highlight" /> Foto utilizada para análise e provador nesta sessão
+                <Lock size={13} className="text-highlight" /> Foto utilizada para análise nesta sessão
               </span>
             </div>
           </div>
