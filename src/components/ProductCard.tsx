@@ -64,7 +64,7 @@ export function ProductCard({
             {product.category === 'Grau' ? 'Armação de Grau' : 'Óculos de Sol'}
           </span>
           {product.size && (
-            <span className="absolute top-3.5 right-3.5 rounded-full bg-void/80 px-2 py-0.5 text-2xs font-bold text-gold border border-gold/20 backdrop-blur-sm">
+            <span className="absolute top-3.5 right-3.5 rounded-full bg-forest/90 px-2 py-0.5 text-2xs font-bold text-white border border-forest/20 backdrop-blur-sm shadow-sm">
               Tam. {product.size}
             </span>
           )}
@@ -75,17 +75,17 @@ export function ProductCard({
 
         <div className="pt-4 pb-2">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-2xs font-bold uppercase tracking-[0.18em] text-gold/80">
+            <p className="text-2xs font-bold uppercase tracking-[0.18em] text-forest">
               {product.brand}
             </p>
             {product.featured && (
-              <span className="inline-flex items-center gap-1 text-2xs font-bold text-amber px-2 py-0.5 rounded-full bg-amber/10 border border-amber/20">
+              <span className="inline-flex items-center gap-1 text-2xs font-bold text-gold px-2 py-0.5 rounded-full bg-gold/10 border border-gold/20">
                 <Sparkles size={10} /> Destaque
               </span>
             )}
           </div>
 
-          <h3 className="mt-1 text-base font-semibold tracking-tight text-cream group-hover:text-gold transition-colors">
+          <h3 className="mt-1 text-base font-semibold tracking-tight text-ink group-hover:text-forest transition-colors">
             {product.name}
           </h3>
 
@@ -98,7 +98,7 @@ export function ProductCard({
               {product.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-mid bg-dark px-2.5 py-0.5 text-2xs text-muted"
+                  className="rounded-full border border-forest/10 bg-mint px-2.5 py-0.5 text-2xs text-muted"
                 >
                   {tag}
                 </span>
@@ -108,10 +108,10 @@ export function ProductCard({
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-3 border-t border-mid pt-3">
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-forest/10 pt-3">
         <div>
           <span className="block text-2xs uppercase tracking-wider text-muted">Investimento</span>
-          <span className="text-sm font-semibold text-gold">
+          <span className="text-sm font-bold text-forest">
             {money.format(product.price)}
           </span>
         </div>
@@ -121,7 +121,7 @@ export function ProductCard({
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleWhatsAppClick}
-          className="inline-flex items-center gap-1.5 rounded-full bg-dark border border-mid px-3.5 py-1.5 text-2xs font-semibold text-soft transition-all hover:bg-gold hover:border-gold hover:text-void"
+          className="inline-flex items-center gap-1.5 rounded-full bg-white border border-forest/20 px-3.5 py-1.5 text-2xs font-bold text-forest transition-all hover:bg-forest hover:border-forest hover:text-white"
         >
           <MessageCircle size={13} />
           <span>Experimentar</span>

@@ -14,7 +14,6 @@ import { FeaturedCollection } from '@/components/FeaturedCollection';
 import { Reveal } from '@/components/Reveal';
 import { StoreLocation } from '@/components/StoreLocation';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { siteConfig } from '@/lib/site-config';
 
 const CATEGORIES = [
   {
@@ -61,7 +60,7 @@ export default function HomePage() {
                   </div>
                   <span
                     className="text-2xs font-bold italic"
-                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#C9A96E', opacity: .7 }}
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#C9A96E', opacity: .9 }}
                   >
                     Nº {item.n}
                   </span>
@@ -70,7 +69,7 @@ export default function HomePage() {
                 <h2>{item.title}</h2>
                 <p>{item.desc}</p>
               </div>
-              <div className="mt-6 pt-4 border-t border-mid flex items-center justify-between text-xs font-semibold text-muted group-hover:text-gold transition-colors">
+              <div className="mt-6 pt-4 border-t border-forest/10 flex items-center justify-between text-xs font-semibold text-muted group-hover:text-forest transition-colors">
                 <span>Explorar</span>
                 <ArrowUpRight
                   size={16}
@@ -88,13 +87,13 @@ export default function HomePage() {
           {[0, 1, 2, 3].map((n) => (
             <span key={n}>
               SUA VISÃO COM PERSONALIDADE{' '}
-              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: 'rgba(250,248,244,.6)' }} />{' '}
+              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: '#C9A96E' }} />{' '}
               ÓTICA NEZZO{' '}
-              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: 'rgba(250,248,244,.6)' }} />{' '}
+              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: '#C9A96E' }} />{' '}
               VARGINHA · MINAS GERAIS{' '}
-              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: 'rgba(250,248,244,.6)' }} />{' '}
+              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: '#C9A96E' }} />{' '}
               LABORATÓRIO COMPUTADORIZADO{' '}
-              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: 'rgba(250,248,244,.6)' }} />{' '}
+              <Sparkles size={14} style={{ display: 'inline', marginBottom: '-2px', color: '#C9A96E' }} />{' '}
             </span>
           ))}
         </div>
@@ -117,7 +116,7 @@ export default function HomePage() {
                 <path
                   d="M52 118H188M61 177H179M120 24V263M70 55L171 218M170 55L69 218M50 145L120 84L190 145L120 235Z"
                   stroke="currentColor"
-                  strokeOpacity=".2"
+                  strokeOpacity=".15"
                 />
                 <path
                   d="M67 118C75 108 93 108 102 118M138 118C147 108 165 108 173 118M120 126L109 172H131M98 204Q120 219 142 204"
@@ -140,36 +139,36 @@ export default function HomePage() {
 
           {/* Lado direito — Copy */}
           <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
-            <span className="eyebrow" style={{ color: '#C9A96E' }}>TECNOLOGIA & VISAGISMO ÓPTICO</span>
+            <span className="eyebrow">TECNOLOGIA & VISAGISMO ÓPTICO</span>
             <h2
-              className="mt-5 leading-tight text-cream"
-              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 'clamp(2rem, 3.5vw, 3.4rem)', fontWeight: 400, letterSpacing: '-0.025em' }}
+              className="mt-5 leading-tight text-ink"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 'clamp(2rem, 3.5vw, 3.4rem)', fontWeight: 500, letterSpacing: '-0.025em' }}
             >
               A armação certa<br />
               não esconde.<br />
-              <em style={{ fontStyle: 'italic', color: '#C9A96E' }}>Revela quem você é.</em>
+              <em style={{ fontStyle: 'italic', color: '#164230' }}>Revela quem você é.</em>
             </h2>
-            <p className="mt-6 text-sm leading-relaxed text-soft">
-              Nosso <strong className="text-cream font-medium">Visagista IA 2.0</strong> mapeia seus pontos faciais
+            <p className="mt-6 text-sm leading-relaxed text-muted">
+              Nosso <strong className="text-forest font-bold">Visagista IA 2.0</strong> mapeia seus pontos faciais
               diretamente no navegador — com total privacidade — e recomenda os modelos Nezzo
               que equilibram suas proporções naturais.
             </p>
 
-            <ul className="mt-6 space-y-3 text-sm text-soft">
+            <ul className="mt-6 space-y-3 text-sm text-muted">
               {[
                 'Cálculo real de proporções anatômicas',
                 'Recomendações com justificativa estética',
                 'Foto descartada após análise (LGPD)',
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5">
-                  <CheckCircle2 size={15} style={{ color: '#C9A96E', flexShrink: 0 }} />
+                <li key={item} className="flex items-center gap-2.5 font-medium">
+                  <CheckCircle2 size={16} style={{ color: '#164230', flexShrink: 0 }} />
                   {item}
                 </li>
               ))}
             </ul>
 
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/visagismo" className="btn btn-gold text-xs">
+              <Link href="/visagismo" className="btn btn-dark text-xs">
                 <ScanFace size={16} />
                 Fazer meu visagismo agora
                 <ArrowUpRight size={15} />
@@ -189,8 +188,8 @@ export default function HomePage() {
       {/* ── 5. Sobre a Nezzo ── */}
       <section className="container-wide pb-20 lg:pb-28">
         <Reveal>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center rounded-4xl bg-dark border border-mid p-8 sm:p-12">
-            <div className="lg:col-span-5 relative h-[380px] sm:h-[440px] rounded-3xl overflow-hidden border border-mid">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center rounded-4xl bg-void border border-forest/10 p-8 sm:p-12 shadow-sm">
+            <div className="lg:col-span-5 relative h-[380px] sm:h-[440px] rounded-3xl overflow-hidden border border-forest/10">
               <Image
                 src="/images/frame-champagne.png"
                 alt="Armações artesanais da Ótica Nezzo"
@@ -198,8 +197,8 @@ export default function HomePage() {
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-void/90 via-void/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-cream">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 text-white">
                 <span className="text-2xs uppercase font-bold tracking-widest text-gold">
                   Atelier Nezzo · Varginha
                 </span>
@@ -216,13 +215,13 @@ export default function HomePage() {
                 <em>Cuidamos da sua expressão.</em>
               </h2>
 
-              <p className="text-sm leading-relaxed text-soft">
-                Nascida no Centro de Varginha - MG, a <strong className="text-cream font-medium">Ótica Nezzo</strong> foi
+              <p className="text-sm leading-relaxed text-muted">
+                Nascida no Centro de Varginha - MG, a <strong className="text-forest font-bold">Ótica Nezzo</strong> foi
                 concebida com o propósito de que óculos não devem ser padronizados. Eles são
                 a primeira impressão que você passa ao mundo.
               </p>
 
-              <div className="grid grid-cols-3 gap-6 border-t border-mid pt-6">
+              <div className="grid grid-cols-3 gap-6 border-t border-forest/10 pt-6">
                 {[
                   { val: '100%', desc: 'Aferição milimétrica digital' },
                   { val: 'Curadoria', desc: 'Acetatos nobres & titânio' },
@@ -230,8 +229,8 @@ export default function HomePage() {
                 ].map(({ val, desc }) => (
                   <div key={val}>
                     <h4
-                      className="text-2xl text-gold"
-                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 400 }}
+                      className="text-2xl text-forest"
+                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}
                     >
                       {val}
                     </h4>
@@ -242,7 +241,7 @@ export default function HomePage() {
 
               <Link
                 href="/sobre"
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold border-b border-gold/30 pb-1 hover:border-gold transition-colors"
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-forest border-b border-forest/30 pb-1 hover:border-forest transition-colors mt-2"
               >
                 Conheça nossa estrutura e laboratório <ArrowUpRight size={14} />
               </Link>
@@ -253,25 +252,25 @@ export default function HomePage() {
 
       {/* ── 6. CTA WhatsApp ── */}
       <section
-        className="relative overflow-hidden py-20 border-y border-mid"
-        style={{ background: 'radial-gradient(110% 180% at 80% 50%, rgba(201,169,110,.08) 0%, rgba(8,8,8,0) 60%), #0D0D0F' }}
+        className="relative overflow-hidden py-20 border-y border-forest/10"
+        style={{ background: 'radial-gradient(110% 180% at 80% 50%, rgba(22,66,48,.04) 0%, rgba(255,255,255,0) 60%), #F9FAF7' }}
       >
         <div
           className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(circle, rgba(201,169,110,.15) 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, rgba(201,169,110,.2) 0%, transparent 70%)' }}
           aria-hidden="true"
         />
         <div className="container-wide relative flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div className="max-w-2xl">
             <span className="eyebrow">CONSULTORIA PERSONALIZADA</span>
             <h2
-              className="mt-4 leading-tight text-cream"
-              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 300 }}
+              className="mt-4 leading-tight text-ink"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400 }}
             >
               Quer uma indicação para sua receita?{' '}
-              <em style={{ fontStyle: 'italic', color: '#C9A96E', fontWeight: 300 }}>Fale com nossos consultores.</em>
+              <em style={{ fontStyle: 'italic', color: '#164230', fontWeight: 500 }}>Fale com nossos consultores.</em>
             </h2>
-            <p className="mt-4 text-sm text-soft leading-relaxed">
+            <p className="mt-4 text-sm text-muted leading-relaxed">
               Envie sua receita ou tire dúvidas sobre armações e lentes diretamente pelo WhatsApp da Ótica Nezzo.
             </p>
           </div>

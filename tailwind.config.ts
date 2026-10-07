@@ -5,37 +5,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /* Obsidiana system */
-        void:    '#080808',
-        deep:    '#111113',
-        dark:    '#1A1A1E',
-        mid:     '#242428',
-        muted:   '#5A5A62',
-        soft:    '#A8A8B3',
-        light:   '#F0EDE8',
-        cream:   '#FAF8F4',
+        /* Tons Claros - Fundo Mistura de Branco */
+        white:   '#FFFFFF',
+        cream:   '#F8FAF7',
+        light:   '#EBF0ED',
+        mint:    '#F2F7F4', // Fundo bem sutil esverdeado
 
-        /* Dourado Líquido */
+        /* Textos e contrastes (Preto e Verde Escuro) */
+        ink:     '#050B08', // Quase preto para textos principais
+        dark:    '#111C16', // Cinza/Verde muito escuro
+        muted:   '#4A5E54', // Verde/Cinza para texto secundário
+        soft:    '#829A8F', // Placeholder/desabilitado
+
+        /* Tons Diferentes de Verde */
+        forest: {
+          DEFAULT: '#164230', // Verde floresta profundo
+          deep:    '#0A261A',
+          card:    '#20543D',
+          surface: '#DDF0E6',
+          sage:    '#8EAFA0',
+        },
+        emerald: {
+          accent: '#10B981',
+          light:  '#34D399',
+          glow:   '#059669',
+        },
+
+        /* Dourado (Cor Terciária) */
         gold: {
-          DEFAULT: '#C9A96E',
-          light:   '#DEC28F',
-          deep:    '#9E7D45',
+          DEFAULT: '#C9A96E', // Dourado suave/premium
+          light:   '#EAD7A1',
+          deep:    '#A88645',
+          glow:    '#D4AF37',
         },
         amber:   '#D4874A',
-        rose:    '#E8C5A0',
 
         /* Legacy compat */
-        primary:   '#080808',
-        accent:    '#C9A96E',
-        paper:     '#FAF8F4',
-        ink:       '#1A1A1E',
+        void:    '#FFFFFF', // Fundo principal agora é branco
+        deep:    '#F8FAF7', 
+        primary: '#0A261A',
+        accent:  '#C9A96E',
+        paper:   '#FFFFFF',
         highlight: '#C9A96E',
-        sand:      '#242428',
+        sand:    '#EBF0ED',
       },
 
       fontFamily: {
-        sans:  ['DM Sans', 'system-ui', 'sans-serif'],
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans:    ['DM Sans', 'system-ui', 'sans-serif'],
+        serif:   ['Cormorant Garamond', 'Georgia', 'serif'],
         display: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
 
@@ -50,11 +67,11 @@ const config: Config = {
       },
 
       boxShadow: {
-        soft:    '0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2)',
-        card:    '0 8px 24px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3)',
-        luxury:  '0 24px 64px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.3)',
-        glow:    '0 0 40px rgba(201,169,110,.2), 0 4px 16px rgba(201,169,110,.12)',
-        'glow-lg':'0 0 80px rgba(201,169,110,.3), 0 16px 48px rgba(201,169,110,.15)',
+        soft:      '0 2px 8px rgba(10, 38, 26, 0.05)',
+        card:      '0 12px 32px rgba(10, 38, 26, 0.08), 0 2px 8px rgba(10, 38, 26, 0.03)',
+        luxury:    '0 24px 64px rgba(10, 38, 26, 0.12), 0 8px 24px rgba(201, 169, 110, 0.15)',
+        glow:      '0 0 30px rgba(201, 169, 110, 0.3)',
+        'white-card': '0 12px 36px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.02)',
       },
 
       animation: {
@@ -97,8 +114,8 @@ const config: Config = {
           '100%': { backgroundPosition: '200% 0' },
         },
         'glow-pulse': {
-          '0%,100%': { boxShadow: '0 0 20px rgba(201,169,110,.2)' },
-          '50%':     { boxShadow: '0 0 50px rgba(201,169,110,.45)' },
+          '0%,100%': { boxShadow: '0 0 15px rgba(201,169,110,.3)' },
+          '50%':     { boxShadow: '0 0 35px rgba(201,169,110,.6)' },
         },
         'ticker-move': {
           '0%':   { transform: 'translateX(0)' },

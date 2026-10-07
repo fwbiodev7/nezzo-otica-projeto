@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Menu, MessageCircle, X, Eye } from 'lucide-react';
+import { ArrowUpRight, Menu, MessageCircle, X, Sparkles } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 import { whatsappUrl } from '@/lib/mock-data';
 
@@ -40,19 +40,20 @@ export function Header() {
     <header
       className="site-header sticky top-0 z-50 transition-all duration-500"
       style={{
-        boxShadow: scrolled ? '0 1px 0 rgba(201,169,110,.1), 0 8px 32px rgba(0,0,0,.4)' : 'none',
+        boxShadow: scrolled ? '0 4px 20px rgba(10,38,26,0.06)' : 'none',
       }}
     >
       {/* Announcement bar */}
       <div className="announcement">
-        <span className="truncate text-2xs font-bold tracking-[0.14em] uppercase text-cream/90">
+        <span className="truncate text-2xs font-bold tracking-[0.14em] uppercase text-white flex items-center gap-2">
+          <Sparkles size={11} className="text-gold" />
           {siteConfig.announcement}
         </span>
         <a
           href={siteConfig.contact.instagramUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:inline-flex items-center gap-1 text-2xs"
+          className="hidden sm:inline-flex items-center gap-1 text-2xs text-gold hover:text-white"
         >
           {siteConfig.contact.instagramLabel} <ArrowUpRight size={11} />
         </a>
@@ -61,22 +62,30 @@ export function Header() {
       <div className="container-wide flex h-[76px] items-center justify-between gap-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group" aria-label="Ótica Nezzo — Início">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-gold/25 bg-gold/10 text-gold transition-all group-hover:bg-gold group-hover:text-void">
-            <Eye size={18} strokeWidth={1.5} />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-forest/20 bg-forest text-white shadow-sm transition-all group-hover:scale-105 group-hover:bg-ink">
+            <svg viewBox="0 0 100 60" className="h-6 w-7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5 30C18 12 40 5 50 5C60 5 82 12 95 30C82 48 60 55 50 55C40 55 18 48 5 30Z"
+                stroke="#C9A96E"
+                strokeWidth="6"
+                strokeLinejoin="round"
+              />
+              <circle cx="50" cy="30" r="13" fill="#C9A96E" />
+              <circle cx="47" cy="26" r="4" fill="#FFFFFF" />
+            </svg>
           </div>
           <div className="flex flex-col">
             <span
-              className="text-base font-semibold leading-none tracking-[0.05em] text-cream uppercase"
-              style={{ letterSpacing: '0.1em' }}
+              className="text-base font-bold leading-none tracking-[0.1em] text-ink uppercase flex items-center gap-1.5"
             >
-              ÓTICA NEZZO
+              ÓTICA <span className="text-forest font-extrabold">NEZZO</span>
             </span>
-            <span className="text-2xs tracking-[0.12em] text-soft mt-0.5">Varginha · MG</span>
+            <span className="text-2xs tracking-[0.15em] text-muted mt-0.5 uppercase">Varginha · MG</span>
           </div>
         </Link>
 
         {/* Nav desktop */}
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Navegação principal">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegação principal">
           {nav.map(([label, href]) => (
             <Link
               key={href}
@@ -96,7 +105,7 @@ export function Header() {
             target="_blank"
             rel="noopener noreferrer"
             id="header-whatsapp"
-            className="hidden sm:inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-2xs font-bold uppercase tracking-[0.1em] text-void transition-all hover:bg-gold-light hover:shadow-glow"
+            className="hidden sm:inline-flex items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-2xs font-bold uppercase tracking-[0.1em] text-white transition-all hover:scale-105 hover:bg-ink hover:shadow-sm"
           >
             <MessageCircle size={14} />
             WhatsApp
@@ -109,7 +118,7 @@ export function Header() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen(!open)}
-            className="rounded-xl border border-white/10 p-2.5 text-light/60 lg:hidden transition hover:bg-white/8 hover:text-cream"
+            className="rounded-xl border border-forest/10 bg-mint p-2.5 text-forest lg:hidden transition hover:bg-forest hover:text-white"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -121,28 +130,28 @@ export function Header() {
         <nav
           id="mobile-menu"
           aria-label="Navegação móvel"
-          className="absolute left-0 right-0 border-b border-mid bg-dark/95 p-6 shadow-luxury backdrop-blur-xl lg:hidden animate-fade-in"
+          className="absolute left-0 right-0 border-b border-forest/10 bg-white/95 p-6 shadow-lg backdrop-blur-xl lg:hidden animate-fade-in"
         >
-          <div className="flex flex-col divide-y divide-mid">
+          <div className="flex flex-col divide-y divide-forest/10">
             {nav.map(([label, href]) => (
               <Link
                 key={href}
                 href={href}
                 aria-current={path === href ? 'page' : undefined}
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-between py-4 text-sm font-medium text-light/70 transition hover:text-gold"
+                className="flex items-center justify-between py-4 text-sm font-semibold text-ink transition hover:text-forest"
               >
                 <span>{label}</span>
-                <ArrowUpRight size={16} className="text-soft" />
+                <ArrowUpRight size={16} className="text-gold" />
               </Link>
             ))}
           </div>
-          <div className="mt-6 pt-4 border-t border-mid">
+          <div className="mt-6 pt-4 border-t border-forest/10">
             <a
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-gold w-full justify-center text-xs"
+              className="btn btn-dark w-full justify-center text-xs"
             >
               <MessageCircle size={16} /> Falar no WhatsApp
             </a>

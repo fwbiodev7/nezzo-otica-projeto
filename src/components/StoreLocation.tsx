@@ -6,117 +6,104 @@ export function StoreLocation() {
   const { contact } = siteConfig;
 
   return (
-    <section className="container-wide section-space" aria-labelledby="store-title">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-
-        {/* Lado Esquerdo */}
-        <div className="lg:col-span-6">
-          <span className="eyebrow">
-            <MapPin size={12} /> ÓTICA NEZZO EM VARGINHA — MG
-          </span>
-          <h2 id="store-title" className="section-title mt-4">
-            Venha tomar um café e{' '}
-            <em>experimentar seu estilo.</em>
-          </h2>
-          <p className="mt-5 max-w-lg text-sm leading-relaxed text-soft">
-            No Centro de Varginha, a <strong className="text-cream font-medium">Ótica Nezzo</strong> une um ambiente acolhedor com atendimento consultivo de visagismo. Aqui você descobre como as armações certas valorizam sua presença.
-          </p>
-
-          <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="surface-card p-5">
-              <div className="flex items-center gap-2.5 text-gold font-semibold text-xs mb-2">
-                <Wrench size={15} /> Laboratório Próprio
-              </div>
-              <p className="text-xs text-soft leading-relaxed">
-                Montagem precisa com equipamentos digitais para conferência milimétrica de eixo e foco.
-              </p>
-            </div>
-
-            <div className="surface-card p-5">
-              <div className="flex items-center gap-2.5 text-gold font-semibold text-xs mb-2">
-                <ShieldCheck size={15} /> Garantia &amp; Ajuste
-              </div>
-              <p className="text-xs text-soft leading-relaxed">
-                Ajuste anatômico de plaquetas e hastes cortesia durante toda a vida útil da peça.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <WhatsAppButton message="Olá! Gostaria de agendar uma consultoria de visagismo presencial na Ótica Nezzo.">
-              Agendar consultoria
-            </WhatsAppButton>
-            <a
-              href={contact.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-soft hover:text-gold transition-colors border-b border-mid hover:border-gold/40 pb-0.5"
-            >
-              <Navigation size={13} /> Abrir no Google Maps
-            </a>
+    <section className="border-t border-forest/10 bg-mint">
+      <div className="container-wide grid grid-cols-1 lg:grid-cols-2">
+        {/* Imagem / Visual */}
+        <div className="relative min-h-[400px] lg:min-h-full">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: "url('/images/store-facade.jpg')",
+              backgroundColor: '#164230', // Fallback color
+            }}
+          />
+          <div className="absolute inset-0 bg-forest/80 backdrop-blur-sm lg:hidden" />
+          
+          <div className="relative h-full flex flex-col justify-end p-8 lg:p-12 lg:hidden text-white">
+            <span className="eyebrow" style={{ color: '#C9A96E' }}>NOSSO ESPAÇO</span>
+            <h2 className="mt-4 text-4xl font-light" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+              Venha tomar um <em style={{ color: '#C9A96E', fontStyle: 'italic' }}>café conosco.</em>
+            </h2>
           </div>
         </div>
 
-        {/* Lado Direito: Card Info */}
-        <div className="lg:col-span-6">
-          <div className="rounded-3xl border border-mid bg-dark p-8 relative overflow-hidden">
-            {/* Orb de luz dourada decorativa */}
-            <div
-              className="pointer-events-none absolute -top-20 -right-20 h-52 w-52 rounded-full blur-[80px]"
-              style={{ background: 'radial-gradient(circle, rgba(201,169,110,.12) 0%, transparent 70%)' }}
-              aria-hidden="true"
-            />
+        {/* Conteúdo Info */}
+        <div className="flex flex-col justify-center px-6 py-16 sm:px-12 lg:px-20 lg:py-24 bg-white shadow-[-20px_0_40px_rgba(10,38,26,0.03)] relative z-10">
+          <div className="hidden lg:block mb-10">
+            <span className="eyebrow">NOSSA ESTRUTURA</span>
+            <h2 className="mt-4 text-5xl font-medium text-ink" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: '-0.03em' }}>
+              Venha tomar um<br />
+              <em style={{ color: '#164230', fontStyle: 'italic' }}>café conosco.</em>
+            </h2>
+          </div>
 
-            <div className="relative flex items-center justify-between border-b border-mid pb-5">
-              <div>
-                <span className="text-2xs font-bold tracking-[0.2em] uppercase text-gold">
-                  Atendimento Físico &amp; Online
-                </span>
-                <h3 className="text-2xl font-medium text-cream mt-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                  Ótica Nezzo · Matriz
-                </h3>
+          <div className="space-y-10">
+            {/* Endereço */}
+            <div className="flex gap-5 group">
+              <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-mint text-forest transition-colors group-hover:bg-forest group-hover:text-white">
+                <MapPin size={22} strokeWidth={1.5} />
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold/15 border border-gold/20 text-gold">
-                <MapPin size={20} />
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-ink mb-1.5">Onde estamos</h3>
+                <p className="text-base text-muted leading-relaxed">
+                  {contact.street}<br />
+                  {contact.city} — CEP {contact.postalCode}
+                </p>
+                <a
+                  href={contact.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-forest hover:text-gold transition-colors"
+                >
+                  <Navigation size={13} /> Traçar rota
+                </a>
               </div>
             </div>
 
-            <div className="relative py-6 space-y-5">
-              <div>
-                <p className="text-2xs text-muted uppercase tracking-wider font-semibold mb-1">Endereço</p>
-                <p className="text-base font-medium text-cream">{contact.address}</p>
-                <p className="text-xs text-soft mt-0.5">Varginha — MG · CEP {contact.postalCode}</p>
+            {/* Contato & Horário */}
+            <div className="grid gap-10 sm:grid-cols-2">
+              <div className="flex gap-4">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint text-forest">
+                  <Phone size={18} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="text-2xs font-bold uppercase tracking-widest text-ink mb-1">Contato</h3>
+                  <p className="text-sm text-muted mb-2">{contact.phoneLabel}</p>
+                  <WhatsAppButton className="!px-0 !py-0 !bg-transparent !text-forest hover:!text-gold hover:!shadow-none !justify-start !font-bold">
+                    Mensagem online
+                  </WhatsAppButton>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                <div>
-                  <p className="text-2xs text-muted uppercase tracking-wider font-semibold mb-1">Contato direto</p>
-                  <a
-                    href={contact.phoneHref}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-gold hover:text-gold-light transition-colors"
-                  >
-                    <Phone size={14} /> {contact.phoneLabel}
-                  </a>
+              <div className="flex gap-4">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint text-forest">
+                  <Clock size={18} strokeWidth={1.5} />
                 </div>
-
                 <div>
-                  <p className="text-2xs text-muted uppercase tracking-wider font-semibold mb-1">Horários</p>
-                  <p className="text-xs text-soft leading-relaxed">{contact.hours}</p>
+                  <h3 className="text-2xs font-bold uppercase tracking-widest text-ink mb-1">Atendimento</h3>
+                  <p className="text-sm text-muted leading-relaxed">
+                    {contact.hours.split(' e ').map((line, i) => (
+                      <span key={i} className="block">{line}</span>
+                    ))}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <a
-              href={contact.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative flex items-center justify-between rounded-2xl bg-gold/10 border border-gold/20 p-4 text-xs font-semibold text-gold transition-all hover:bg-gold hover:text-void"
-            >
-              <span className="flex items-center gap-2">
-                <Navigation size={15} /> Traçar rota até a Ótica Nezzo
-              </span>
-              <ArrowUpRight size={15} />
-            </a>
+            {/* Laboratório Próprio */}
+            <div className="rounded-2xl border border-forest/10 bg-mint p-6">
+              <div className="flex items-center gap-3 mb-3 text-forest">
+                <Wrench size={18} />
+                <h3 className="text-xs font-bold uppercase tracking-widest">Laboratório Computadorizado</h3>
+              </div>
+              <p className="text-sm text-muted leading-relaxed">
+                Montagem de lentes visão simples e multifocais com precisão milimétrica em nossa própria loja. Rapidez e garantia total.
+              </p>
+              <div className="mt-4 flex gap-4 text-xs font-medium text-forest">
+                <div className="flex items-center gap-1.5"><ShieldCheck size={14} /> Garantia de fábrica</div>
+                <div className="flex items-center gap-1.5"><ShieldCheck size={14} /> Manutenção gratuita</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

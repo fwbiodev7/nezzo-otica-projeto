@@ -33,7 +33,7 @@ export function FeaturedCollection() {
         </div>
         <Link
           href="/catalogo"
-          className="inline-flex items-center gap-2 text-2xs font-bold uppercase tracking-[0.14em] text-gold border-b border-gold/30 pb-1 hover:border-gold transition-colors whitespace-nowrap"
+          className="inline-flex items-center gap-2 text-2xs font-bold uppercase tracking-[0.14em] text-forest border-b border-forest/30 pb-1 hover:border-forest transition-colors whitespace-nowrap"
         >
           Ver catálogo completo ({products.length} modelos)
           <ArrowUpRight size={14} />
@@ -41,7 +41,7 @@ export function FeaturedCollection() {
       </div>
 
       {/* Tabs */}
-      <div className="mb-8 flex items-center gap-1 border-b border-mid pb-0">
+      <div className="mb-8 flex items-center gap-1 border-b border-forest/10 pb-0">
         {TABS.map(({ key, label }) => (
           <button
             key={key}
@@ -50,14 +50,14 @@ export function FeaturedCollection() {
             onClick={() => setCategory(key)}
             className={`
               relative px-4 py-3 text-xs font-semibold tracking-wider uppercase transition-colors
-              ${category === key ? 'text-cream' : 'text-muted hover:text-soft'}
+              ${category === key ? 'text-forest' : 'text-muted hover:text-ink'}
             `}
           >
             {label}
             {category === key && (
               <span
-                className="absolute bottom-0 left-0 right-0 h-px"
-                style={{ background: 'linear-gradient(90deg, #C9A96E, #D4874A)' }}
+                className="absolute bottom-0 left-0 right-0 h-0.5"
+                style={{ background: 'var(--c-forest)' }}
               />
             )}
           </button>
@@ -74,19 +74,19 @@ export function FeaturedCollection() {
       </div>
 
       {selected.length === 0 && (
-        <p className="py-12 text-center text-soft text-sm">
+        <p className="py-12 text-center text-muted text-sm">
           Novas armações estão a caminho. Consulte modelos pelo WhatsApp.
         </p>
       )}
 
-      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-dark border border-mid p-5">
-        <p className="text-xs text-soft">
-          <strong className="text-cream font-semibold">Dúvida sobre tamanho ou graduação?</strong>{' '}
+      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-mint border border-forest/10 p-5">
+        <p className="text-xs text-muted">
+          <strong className="text-ink font-semibold">Dúvida sobre tamanho ou graduação?</strong>{' '}
           Lentes multifocais e visão simples montadas em laboratório computadorizado próprio.
         </p>
         <Link
           href="/visagismo"
-          className="inline-flex items-center gap-2 text-xs font-bold text-gold whitespace-nowrap hover:underline"
+          className="inline-flex items-center gap-2 text-xs font-bold text-forest whitespace-nowrap hover:underline"
         >
           Descobrir formato do seu rosto <ArrowUpRight size={14} />
         </Link>

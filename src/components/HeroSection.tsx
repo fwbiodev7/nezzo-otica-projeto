@@ -39,16 +39,16 @@ export function HeroSection() {
       className="hero-shell"
       aria-label="Apresentação da Ótica Nezzo"
     >
-      {/* Background: grade dourada + orbs de luz */}
+      {/* Background */}
       <div className="hero-grid" aria-hidden="true" />
       <div className="hero-orb hero-orb-1" aria-hidden="true" />
       <div className="hero-orb hero-orb-2" aria-hidden="true" />
 
-      {/* Gradiente vinheta nas bordas */}
+      {/* Gradiente vinheta nas bordas para focar no centro (Light mode) */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 40%, rgba(8,8,8,.85) 100%)',
+          background: 'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 40%, rgba(255,255,255,.9) 100%)',
         }}
         aria-hidden="true"
       />
@@ -66,10 +66,10 @@ export function HeroSection() {
             }}
           >
             {/* Eyebrow tag */}
-            <div className="inline-flex items-center gap-3 rounded-full border border-gold/25 bg-gold/8 px-4 py-2 text-2xs font-bold uppercase tracking-[0.22em] text-gold">
+            <div className="inline-flex items-center gap-3 rounded-full border border-forest/10 bg-mint px-4 py-2 text-2xs font-bold uppercase tracking-[0.22em] text-forest shadow-sm">
               <span className="status-dot" />
               Ótica Nezzo · Varginha — MG
-              <span className="h-3 w-px bg-gold/30" />
+              <span className="h-3 w-px bg-forest/20" />
               <Star size={10} className="fill-gold text-gold" />
               Curadoria exclusiva
             </div>
@@ -83,20 +83,20 @@ export function HeroSection() {
               <strong>lidade.</strong>
             </h1>
 
-            {/* Linha dourada */}
+            {/* Linha decorativa verde/dourada */}
             <div className="hero-rule w-24" />
 
-            <p className="max-w-lg text-base leading-relaxed text-light/65">
+            <p className="max-w-lg text-base leading-relaxed text-muted">
               Curadoria internacional de armações, lentes de alta precisão e o nosso{' '}
-              <span className="text-gold font-medium">Visagista IA 2.0</span>{' '}
+              <span className="text-forest font-bold">Visagista IA 2.0</span>{' '}
               — tecnologia facial biométrica para você encontrar a moldura perfeita.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Link href="/visagismo" id="hero-cta-visagista" className="btn btn-gold group text-xs">
+              <Link href="/visagismo" id="hero-cta-visagista" className="btn btn-dark group text-xs">
                 <ScanFace size={17} className="transition-transform group-hover:scale-110" />
-                Descobrir armação ideal (IA)
+                Descobrir armação ideal
                 <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
 
@@ -113,16 +113,16 @@ export function HeroSection() {
             </div>
 
             {/* Stats row */}
-            <div className="flex items-center gap-8 border-t border-white/8 pt-8">
+            <div className="flex items-center gap-8 border-t border-forest/10 pt-8">
               {STATS.map((s) => (
                 <div key={s.label} className="flex flex-col">
                   <span
-                    className="text-2xl font-light"
-                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#C9A96E' }}
+                    className="text-2xl font-medium"
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", color: '#164230' }}
                   >
                     {s.value}
                   </span>
-                  <span className="text-2xs tracking-wider text-soft uppercase mt-0.5">{s.label}</span>
+                  <span className="text-2xs tracking-wider text-muted uppercase mt-0.5 font-semibold">{s.label}</span>
                 </div>
               ))}
             </div>
@@ -141,9 +141,9 @@ export function HeroSection() {
 
               {/* Moldura principal da imagem */}
               <div
-                className="relative h-full w-full overflow-hidden rounded-[2.5rem] border border-white/8 shadow-luxury"
+                className="relative h-full w-full overflow-hidden rounded-[2.5rem] border border-forest/10 shadow-luxury"
                 style={{
-                  background: '#0A0A0A',
+                  background: '#FFFFFF',
                   transform: `perspective(900px) rotateY(${mousePos.x * 0.015}deg) rotateX(${-mousePos.y * 0.015}deg)`,
                   transition: 'transform .08s linear',
                 }}
@@ -155,63 +155,62 @@ export function HeroSection() {
                   priority
                   sizes="(max-width: 1024px) 90vw, 420px"
                   className="object-cover object-center"
-                  style={{ opacity: .85 }}
                 />
-                {/* Overlay gradiente escuro */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-[#080808]/20" />
+                {/* Overlay gradiente inferior para leitura */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                 {/* Card inferior dentro da imagem */}
-                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/10 bg-[#080808]/80 p-4 backdrop-blur-xl">
+                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/20 bg-white/90 p-4 backdrop-blur-xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xs font-bold tracking-[0.2em] uppercase text-gold">Coleção Nezzo Atelier</span>
-                    <span className="rounded-full bg-gold/15 border border-gold/20 px-2.5 py-0.5 text-2xs font-bold text-gold">
+                    <span className="text-2xs font-bold tracking-[0.2em] uppercase text-forest">Coleção Nezzo Atelier</span>
+                    <span className="rounded-full bg-gold border border-gold px-2.5 py-0.5 text-2xs font-extrabold text-white">
                       Exclusivo
                     </span>
                   </div>
-                  <p className="mt-2 text-lg font-light italic text-cream" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                  <p className="mt-2 text-lg font-medium italic text-ink" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
                     &ldquo;{campaign.caption}&rdquo;
                   </p>
                 </div>
               </div>
 
               {/* Card flutuante superior direito */}
-              <div className="absolute -top-4 -right-4 hidden sm:flex items-center gap-3 rounded-2xl border border-white/10 bg-dark/90 px-4 py-3 shadow-luxury backdrop-blur-xl animate-float">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold/15 border border-gold/20">
+              <div className="absolute -top-4 -right-4 hidden sm:flex items-center gap-3 rounded-2xl border border-forest/10 bg-white/95 px-4 py-3 shadow-lg backdrop-blur-xl animate-float">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-mint border border-forest/10">
                   <Star size={16} className="fill-gold text-gold" />
                 </div>
                 <div>
-                  <strong className="block text-xs font-bold text-cream">4.9 / 5.0 estrelas</strong>
-                  <span className="text-2xs text-soft">Excelência no atendimento</span>
+                  <strong className="block text-xs font-bold text-ink">4.9 / 5.0 estrelas</strong>
+                  <span className="text-2xs text-muted">Excelência no atendimento</span>
                 </div>
               </div>
 
-              {/* Selo giratório */}
+              {/* Selo giratório em verde e branco */}
               <div
-                className="absolute -left-6 -bottom-6 z-20 flex h-28 w-28 items-center justify-center rounded-full border border-gold/20 bg-dark shadow-luxury"
+                className="absolute -left-6 -bottom-6 z-20 flex h-28 w-28 items-center justify-center rounded-full border border-forest/10 bg-white shadow-lg"
                 aria-hidden="true"
               >
                 <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full animate-spin-slow">
                   <defs>
                     <path id="seal-path" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
                   </defs>
-                  <text style={{ fontSize: '7.5px', fontWeight: '700', letterSpacing: '0.18em', fill: '#C9A96E', textTransform: 'uppercase' }}>
+                  <text style={{ fontSize: '7.5px', fontWeight: '800', letterSpacing: '0.18em', fill: '#164230', textTransform: 'uppercase' }}>
                     <textPath href="#seal-path">· ÓTICA NEZZO · VARGINHA - MG ·</textPath>
                   </text>
                 </svg>
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gold text-void shadow-glow">
-                  <Sparkles size={17} />
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-forest text-white shadow-sm">
+                  <Sparkles size={17} className="text-gold" />
                 </div>
               </div>
 
               {/* Destaque IA card */}
-              <div className="absolute -left-10 top-1/3 hidden lg:flex flex-col gap-1.5 rounded-2xl border border-gold/15 bg-dark/90 px-3.5 py-3 shadow-luxury backdrop-blur-xl">
-                <div className="flex items-center gap-2 text-2xs text-gold font-bold uppercase tracking-widest">
-                  <ScanFace size={13} />
+              <div className="absolute -left-10 top-1/3 hidden lg:flex flex-col gap-1.5 rounded-2xl border border-forest/10 bg-white/95 px-3.5 py-3 shadow-lg backdrop-blur-xl">
+                <div className="flex items-center gap-2 text-2xs text-forest font-bold uppercase tracking-widest">
+                  <ScanFace size={13} className="text-gold" />
                   Visagista IA 2.0
                 </div>
-                <div className="text-2xs text-soft">Análise biométrica facial</div>
-                <div className="mt-1 h-1 w-full rounded-full bg-mid overflow-hidden">
-                  <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-gold to-amber animate-pulse-subtle" />
+                <div className="text-2xs text-muted">Análise biométrica facial</div>
+                <div className="mt-1 h-1 w-full rounded-full bg-mint overflow-hidden">
+                  <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-forest to-gold animate-pulse-subtle" />
                 </div>
               </div>
             </div>
@@ -219,10 +218,10 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Seta scroll down */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 hover:opacity-70 transition-opacity">
-        <span className="text-2xs tracking-[0.2em] uppercase text-soft">Explorar</span>
-        <div className="h-6 w-px bg-gradient-to-b from-gold/50 to-transparent" />
+      {/* Seta scroll down - Verde escuro */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+        <span className="text-2xs font-bold tracking-[0.2em] uppercase text-forest">Explorar</span>
+        <div className="h-6 w-px bg-gradient-to-b from-forest to-transparent" />
       </div>
     </section>
   );
