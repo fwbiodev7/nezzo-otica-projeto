@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { useState } from 'react';
 import {
   ArrowRight,
   CheckCircle2,
@@ -15,43 +15,30 @@ import {
 } from 'lucide-react';
 import type { FaceAnalysisResult, Product } from '@/types';
 import { useCatalog } from '@/lib/use-catalog';
-import { ProductCard } from './ProductCard';
+import { VirtualTryOn } from './VirtualTryOn';
+import { CatalogPhoto } from './CatalogPhoto';
+import { recommendCatalogFrames, type FramePreferences } from '@/lib/frame-recommendations';
 import { trackEvent } from '@/lib/analytics';
 import { whatsappUrl } from '@/lib/mock-data';
 
 export function FaceResult({
   result,
+  image,
+  cloudTryOn = false,
   onRestart,
 }: {
   result: FaceAnalysisResult;
+  image: string;
+  cloudTryOn?: boolean;
   onRestart: () => void;
 }) {
   const products = useCatalog();
+  const [preferences, setPreferences] = useState<FramePreferences>({ category: 'Grau', style: 'Versátil' });
 
-  const matched = (result.recommendedProducts || [])
-    .map(item => ({
-      product: products.find(product => product.id === item.productId),
-      reason: item.reason,
-    }))
-    .filter((item): item is { product: Product; reason: string } => Boolean(item.product));
+  const chosen = recommendCatalogFrames(result.faceShape, products, undefined, preferences);
+  const recommendedShapes = [...new Set(chosen.map(({ product }) => product.frameShape))];
 
-  const chosen = [
-    ...matched,
-    ...products
-      .filter(
-        p =>
-          !matched.some(item => item.product.id === p.id) &&
-          result.recommendedFrameShapes.includes(p.frameShape)
-      )
-      .map(product => ({
-        product,
-        reason: 'O desenho desta armação equilibra proporcionalmente as linhas observadas.',
-      })),
-  ].slice(0, 3);
-
-  const suggestedSize = result.suggestedSize || result.metrics?.suggestedSize || 'M';
-
-  const whatsappMessage = `Olá! Fiz a análise no Visagista IA da Ótica Nezzo. Meu formato identificado foi "${result.faceShape}" com tamanho sugerido "${suggestedSize}". Gostaria de experimentar as armações: ${chosen
+  const whatsappMessage = `Olá! Fiz o Visagista IA da Ótica Nezzo e busco óculos ${preferences.category.toLowerCase()} com estilo ${preferences.style.toLowerCase()}. Meu contorno aparente é ${result.faceShape.toLowerCase()}. Gostaria de experimentar as armações: ${chosen
     .map(item => item.product.name)
     .join(', ')}.`;
 
@@ -73,6 +60,18 @@ export function FaceResult({
 
   return (
     <div className="animate-fade-in space-y-12">
+      <section className="rounded-3xl border border-sand bg-paper p-6 sm:p-8" aria-labelledby="preferencias-title">
+        <h3 id="preferencias-title" className="section-title text-2xl">Sua personalidade também conta.</h3>
+        <p className="mt-2 text-sm text-primary">Escolha o que procura. Suas sugestões mudam na hora, usando os modelos do catálogo.</p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <fieldset><legend className="mb-2 text-xs font-bold text-primary">Que tipo de óculos você procura?</legend><div className="flex flex-wrap gap-2">
+            {(['Grau', 'Sol', 'Todos'] as const).map(category => <button key={category} type="button" aria-pressed={preferences.category === category} onClick={() => setPreferences(current => ({ ...current, category }))} className={`rounded-full border px-4 py-2 text-xs font-semibold ${preferences.category === category ? 'border-forest bg-forest text-white' : 'border-sand bg-white text-primary'}`}>{category === 'Todos' ? 'Todos' : `Óculos de ${category.toLowerCase()}`}</button>)}
+          </div></fieldset>
+          <fieldset><legend className="mb-2 text-xs font-bold text-primary">Qual estilo tem mais a sua cara?</legend><div className="flex flex-wrap gap-2">
+            {(['Versátil', 'Discreto', 'Marcante'] as const).map(style => <button key={style} type="button" aria-pressed={preferences.style === style} onClick={() => setPreferences(current => ({ ...current, style }))} className={`rounded-full border px-4 py-2 text-xs font-semibold ${preferences.style === style ? 'border-forest bg-forest text-white' : 'border-sand bg-white text-primary'}`}>{style}</button>)}
+          </div></fieldset>
+        </div>
+      </section>
       {/* 1. Header do Laudo */}
       <div className="overflow-hidden rounded-3xl border border-sand bg-paper shadow-xl">
         <div className="grid grid-cols-1 lg:grid-cols-12">
@@ -80,11 +79,11 @@ export function FaceResult({
           <div className="lg:col-span-5 flex flex-col justify-between bg-primary p-8 sm:p-12 text-[#FAF8F5]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/30 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-highlight">
-                <ScanFace size={14} /> Laudo Visagista Nezzo 2.0
+                <ScanFace size={14} /> Seu guia de estilo Nezzo
               </div>
 
               <span className="mt-8 block text-xs font-semibold uppercase tracking-[0.18em] text-[#FAF8F5]/60">
-                Formato Facial Identificado
+                Seu contorno aparente
               </span>
               <h2 className="mt-2 text-4xl sm:text-5xl font-medium tracking-tight text-[#FAF8F5]">
                 {result.faceShape}
@@ -98,17 +97,10 @@ export function FaceResult({
             {/* Sugestão de Porte de Armação */}
             <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
               <span className="text-[10px] uppercase font-bold tracking-wider text-highlight">
-                Porte Sugerido de Armação
+                Ajuste que faz a diferença
               </span>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-white">Tamanho {suggestedSize}</span>
-                <span className="text-xs text-[#FAF8F5]/60">
-                  {suggestedSize === 'P'
-                    ? '(Aros entre 48mm e 51mm)'
-                    : suggestedSize === 'G'
-                    ? '(Aros a partir de 55mm)'
-                    : '(Aros entre 52mm e 54mm)'}
-                </span>
+                <p className="text-sm leading-relaxed text-white/85">A largura da armação, o apoio no nariz e o conforto das hastes precisam ser conferidos ao experimentar. Uma foto sozinha não determina medidas em milímetros.</p>
               </div>
             </div>
           </div>
@@ -121,12 +113,12 @@ export function FaceResult({
                   <Sparkles size={18} />
                   <span className="text-xs font-bold uppercase tracking-wider">
                     {result.source === 'local'
-                      ? 'Processamento Biométrico Local (MediaPipe)'
+                      ? 'Análise de proporções'
                       : 'Curadoria Inteligente Nezzo'}
                   </span>
                 </div>
                 <span className="text-[11px] font-semibold text-ink/40 uppercase tracking-widest">
-                  Privacidade 100% Protegida
+                  Foto nesta sessão
                 </span>
               </div>
 
@@ -135,7 +127,7 @@ export function FaceResult({
                 <div className="mt-6">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                     <Ruler size={14} className="text-accent" />
-                    Proporções Faciais Mensuradas
+                    Proporções observadas na foto
                   </h4>
                   <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
                     <div className="rounded-xl border border-sand bg-light p-3">
@@ -160,12 +152,12 @@ export function FaceResult({
 
                     <div className="rounded-xl border border-sand bg-light p-3">
                       <span className="block text-[10px] font-semibold text-ink/50 uppercase">
-                        Simetria Bilateral
+                        Orientação da foto
                       </span>
                       <strong className="mt-1 block text-lg font-bold text-accent">
-                        {(result.metrics.symmetryRatio * 100).toFixed(0)}%
+                        {result.metrics.isFrontal ? 'Frontal' : 'Leve inclinação'}
                       </strong>
-                      <span className="text-[10px] text-ink/60">Equilíbrio dos eixos</span>
+                      <span className="text-[10px] text-ink/60">Referência para a simulação</span>
                     </div>
                   </div>
                 </div>
@@ -177,9 +169,16 @@ export function FaceResult({
                   <Layers size={14} className="text-accent" />
                   Diretriz de Harmonização Visual
                 </h4>
-                <p className="mt-2 text-sm leading-relaxed text-ink/80 bg-light/70 p-4 rounded-2xl border border-sand">
+                <p className="mt-2 text-sm leading-relaxed text-primary bg-light p-4 rounded-2xl border border-sand">
                   {result.styleAdvice}
                 </p>
+                {chosen[0] && <div id="melhor-armacao" className="mt-4 rounded-2xl border border-forest/20 bg-mint p-4">
+                  <span className="text-xs font-bold uppercase text-primary">Melhor opção do catálogo para experimentar</span>
+                  <div className="relative mt-3 h-28 overflow-hidden rounded-xl bg-white"><CatalogPhoto product={chosen[0].product} /></div>
+                  <strong className="mt-3 block text-base text-primary">{chosen[0].product.name}</strong>
+                  <p className="mt-1 text-sm leading-relaxed text-primary">{chosen[0].reason}</p>
+                  <a href="#recomendados" className="mt-2 inline-block text-xs font-semibold text-forest underline">Ver esta armação e outras opções</a>
+                </div>}
               </div>
 
               {/* Formatos Recomendados */}
@@ -188,10 +187,10 @@ export function FaceResult({
                   Formatos de Armação Mais Favoráveis:
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {result.recommendedFrameShapes.map(shape => (
+                  {recommendedShapes.map(shape => (
                     <span
                       key={shape}
-                      className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent border border-accent/20"
+                      className="inline-flex items-center gap-1 rounded-full bg-forest/surface px-3 py-1 text-xs font-semibold text-primary border border-forest/20"
                     >
                       <CheckCircle2 size={13} />
                       {shape}
@@ -235,13 +234,15 @@ export function FaceResult({
         </div>
       </div>
 
+      <VirtualTryOn image={image} placement={result.placement} cloudAvailable={cloudTryOn} products={[...chosen.map(item => item.product), ...products.filter(product => product.inStock !== false && (preferences.category === 'Todos' || product.category === preferences.category) && !chosen.some(item => item.product.id === product.id))]} />
+
       {/* 2. Ranking de Armações Compatíveis do Catálogo Nezzo */}
       <div id="recomendados" className="scroll-mt-28">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="eyebrow">SELEÇÃO PERSONALIZADA · ÓTICA NEZZO</span>
             <h3 className="section-title mt-2 text-2xl sm:text-3xl">
-              Armações perfeitas para <em>o seu perfil.</em>
+              Armações selecionadas para <em>o seu estilo.</em>
             </h3>
             <p className="mt-1 text-xs text-ink/60">
               Modelos selecionados do nosso catálogo em Varginha compatíveis com o formato {result.faceShape}.
@@ -266,21 +267,15 @@ export function FaceResult({
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-[10px] font-bold text-[#FAF8F5]">
-                    {index + 1}º Recomendação
+                    {index === 0 ? 'Melhor combinação' : `${index + 1}ª opção`}
                   </span>
-                  <span className="text-[11px] font-semibold text-accent">
+                  <span className="text-[11px] font-semibold text-primary">
                     Formato {product.frameShape}
                   </span>
                 </div>
 
                 <div className="relative aspect-[1.25] overflow-hidden rounded-2xl bg-light border border-sand">
-                  <Image
-                    src={product.image}
-                    alt={`Armação ${product.name}`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 300px"
-                    className="object-cover transition-transform duration-500 hover:scale-105"
-                  />
+                  <CatalogPhoto product={product} alt={`Armação ${product.name}`} sizes="(max-width: 640px) 100vw, 300px" />
                   {product.size && (
                     <span className="absolute top-3 right-3 rounded-md bg-paper/90 px-2 py-0.5 text-[9px] font-bold text-primary shadow-sm border border-sand">
                       Tam. {product.size}
@@ -305,7 +300,7 @@ export function FaceResult({
                 <div>
                   <span className="text-[10px] text-ink/50 uppercase block">Valor</span>
                   <span className="text-sm font-bold text-primary">
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                    {product.price > 0 ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price) : 'Preço sob consulta'}
                   </span>
                 </div>
 
@@ -322,6 +317,7 @@ export function FaceResult({
             </div>
           ))}
         </div>
+        {chosen.length === 0 && <p className="text-sm text-primary">Nenhuma armação disponível no catálogo neste momento. Consulte a ótica pelo WhatsApp.</p>}
       </div>
     </div>
   );

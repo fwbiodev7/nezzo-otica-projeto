@@ -28,7 +28,7 @@ export default async function CatalogPage({
             Armações com <em>a sua personalidade.</em>
           </h1>
           <p className="mt-5 max-w-xl text-sm sm:text-base leading-relaxed text-ink/75">
-            Explore modelos receituário e solares com materiais de alto padrão. Encontrou sua peça favorita? Agende um atendimento ou consulte disponibilidade via WhatsApp com nossos especialistas em Varginha.
+            Conheça as armações publicadas pela Ótica Nezzo no Instagram. Preços e disponibilidade atual são confirmados pelo WhatsApp. Os nomes descrevem os modelos das fotos; consulte a ótica para confirmar o código de cada peça.
           </p>
         </div>
       </section>

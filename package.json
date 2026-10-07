@@ -10,6 +10,7 @@
     "start": "next start",
     "demo": "node scripts/demo.mjs",
     "test:visagismo": "node scripts/test-visagismo-local.mjs",
+    "test:provador": "node scripts/test-ai-flow.mjs",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "test:site": "node scripts/check-redesign.mjs"

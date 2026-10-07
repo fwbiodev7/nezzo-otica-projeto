@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Menu, MessageCircle, X, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Menu, MessageCircle, X, Sparkles, Shield } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 import { whatsappUrl } from '@/lib/mock-data';
 
@@ -110,6 +110,14 @@ export function Header() {
             <MessageCircle size={14} />
             WhatsApp
           </a>
+
+          <Link
+            href="/admin"
+            aria-label="Acesso Admin"
+            className="hidden sm:flex h-[38px] w-[38px] items-center justify-center rounded-full border border-forest/10 bg-mint text-forest transition hover:bg-forest hover:text-white"
+          >
+            <Shield size={16} />
+          </Link>
 
           <button
             ref={toggle}

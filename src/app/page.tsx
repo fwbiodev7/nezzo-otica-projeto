@@ -14,6 +14,7 @@ import { FeaturedCollection } from '@/components/FeaturedCollection';
 import { Reveal } from '@/components/Reveal';
 import { StoreLocation } from '@/components/StoreLocation';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { Testimonials } from '@/components/Testimonials';
 
 const CATEGORIES = [
   {
@@ -133,7 +134,7 @@ export default function HomePage() {
               <div className="scan-line" />
             </div>
             <span className="scan-label">
-              <span className="status-dot" /> VISAGISMO 2.0 · PRIVACIDADE TOTAL
+              <span className="status-dot" /> VISAGISMO 2.0 · SEU ESTILO
             </span>
           </div>
 
@@ -150,15 +151,15 @@ export default function HomePage() {
             </h2>
             <p className="mt-6 text-sm leading-relaxed text-muted">
               Nosso <strong className="text-forest font-bold">Visagista IA 2.0</strong> mapeia seus pontos faciais
-              diretamente no navegador — com total privacidade — e recomenda os modelos Nezzo
-              que equilibram suas proporções naturais.
+              diretamente no navegador e ajuda a escolher modelos Nezzo que valorizam seus traços.
+              Personalize a seleção pelo tipo de óculos e pelo estilo que você gosta.
             </p>
 
             <ul className="mt-6 space-y-3 text-sm text-muted">
               {[
-                'Cálculo real de proporções anatômicas',
+                'Sugestões a partir dos seus traços faciais',
                 'Recomendações com justificativa estética',
-                'Foto descartada após análise (LGPD)',
+                'Você pode apagar a foto ao reiniciar',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2.5 font-medium">
                   <CheckCircle2 size={16} style={{ color: '#164230', flexShrink: 0 }} />
@@ -250,7 +251,10 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      {/* ── 6. CTA WhatsApp ── */}
+      {/* ── 6. Depoimentos (Google) ── */}
+      <Testimonials />
+
+      {/* ── 7. CTA WhatsApp ── */}
       <section
         className="relative overflow-hidden py-20 border-y border-forest/10"
         style={{ background: 'radial-gradient(110% 180% at 80% 50%, rgba(22,66,48,.04) 0%, rgba(255,255,255,0) 60%), #F9FAF7' }}

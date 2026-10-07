@@ -196,7 +196,6 @@ body {
    ============================================================ */
 .hero-shell {
   position: relative;
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -658,6 +657,14 @@ body {
 /* ============================================================
    RESPONSIVO
    ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @media (max-width: 900px) {
   .category-paths {
     grid-template-columns: 1fr;

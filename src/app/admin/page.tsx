@@ -138,11 +138,14 @@ export default function AdminPage() {
   ]);
 
   useEffect(() => {
-    try {
-      const auth = sessionStorage.getItem('nezzo_admin_session');
-      if (auth === 'true') setIsAuthenticated(true);
-      setAuditLogs(getAuditLogs());
-    } catch {}
+    const sessionFrame = requestAnimationFrame(() => {
+      try {
+        const auth = sessionStorage.getItem('nezzo_admin_session');
+        if (auth === 'true') setIsAuthenticated(true);
+        setAuditLogs(getAuditLogs());
+      } catch {}
+    });
+    return () => cancelAnimationFrame(sessionFrame);
   }, []);
 
   function handleLogin(e?: FormEvent) {

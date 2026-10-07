@@ -4,6 +4,13 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
+export function GET() {
+  return NextResponse.json({
+    cloudAnalysis: Boolean(process.env.GEMINI_API_KEY || process.env.HUGGINGFACE_API_KEY || process.env.NVIDIA_API_KEY),
+    cloudTryOn: Boolean(process.env.GEMINI_API_KEY),
+  }, { headers: { 'Cache-Control': 'no-store' } });
+}
+
 export async function POST(request: Request) {
   try {
     // 1. Proteção de Taxa de Requisições (Rate Limiting anti-DoS e anti-abuso de tokens)

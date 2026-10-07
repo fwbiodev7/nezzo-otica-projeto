@@ -8,6 +8,8 @@ export interface Product {
   brand: string;
   price: number;
   image: string;
+  imageCrop?: { x: number; y: number; width: number; height: number; sourceWidth: number; sourceHeight: number };
+  sourceUrl?: string;
   category: ProductCategory;
   frameShape: FrameShape;
   size?: FrameSize;
@@ -24,7 +26,7 @@ export interface FaceMetrics {
   jawToCheekRatio: number; // Largura Mandíbula / Largura Maçãs
   foreheadToJawRatio: number; // Largura Testa / Mandíbula
   symmetryRatio: number; // 0 a 1 (1 = 100% simétrico)
-  suggestedSize: FrameSize; // P, M ou G baseado na proporção da face
+  suggestedSize?: FrameSize;
   isFrontal: boolean; // Confirmação de pose frontal adequada
   measurementDisclaimer: string; // Aviso formal LGPD / Não clínico
 }
@@ -38,6 +40,15 @@ export interface FaceAnalysisResult {
   metrics?: FaceMetrics;
   recommendedProducts: Array<{ productId: string; reason: string }>;
   suggestedSize?: FrameSize;
+  placement?: FacePlacement;
+}
+
+export interface FacePlacement {
+  centerX: number;
+  centerY: number;
+  width: number;
+  rotation: number;
+  imageAspectRatio: number;
 }
 
 export interface ContactLead {

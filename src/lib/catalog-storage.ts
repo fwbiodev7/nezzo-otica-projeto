@@ -7,13 +7,25 @@ export const CATALOG_STORAGE_KEY = 'oticafabio_catalog_v1';
 export const CATALOG_CHANGE_EVENT = 'oticafabio_catalog_changed';
 const shapes = ['Redondo', 'Gatinho', 'Aviador', 'Retangular', 'Oval', 'Quadrado'];
 const categories = ['Grau', 'Sol', 'Multifocal'];
+function isCrop(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!value || typeof value !== 'object') return false;
+  const crop = value as Record<string, number>;
+  return ['x', 'y', 'width', 'height', 'sourceWidth', 'sourceHeight'].every(key => typeof crop[key] === 'number' && Number.isFinite(crop[key]) && crop[key] >= 0)
+    && crop.width > 0 && crop.height > 0 && crop.sourceWidth <= 10_000 && crop.sourceHeight <= 10_000
+    && crop.x + crop.width <= crop.sourceWidth && crop.y + crop.height <= crop.sourceHeight;
+}
+function migrateIllustrations(items: Product[]): Product[] {
+  const retained = items.filter(product => !/^0[1-9]$/.test(product.id) || !/^\/images\/frame-(rectangular|champagne|cat-eye|aviator)\.png$/.test(product.image));
+  return retained.length === items.length ? items : [...retained, ...defaultProducts.filter(product => !retained.some(item => item.id === product.id))];
+}
 function isProduct(value: unknown): value is Product {
   if (!value || typeof value !== 'object') return false;
   const p = value as Record<string, unknown>;
   return ['id', 'name', 'brand', 'color', 'image'].every(k => typeof p[k] === 'string' && (p[k] as string).trim().length > 0)
     && typeof p.price === 'number' && Number.isFinite(p.price) && p.price >= 0
     && shapes.includes(p.frameShape as string) && categories.includes(p.category as string)
-    && Array.isArray(p.tags) && p.tags.every(t => typeof t === 'string')
+    && Array.isArray(p.tags) && p.tags.every(t => typeof t === 'string') && isCrop(p.imageCrop)
     && (/^\/images\/[a-zA-Z0-9._/-]+$/.test(p.image as string) || /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p.image as string) || /^https:\/\/[^\s]+$/.test(p.image as string));
 }
 function validateCatalog(value: unknown): Product[] {
@@ -24,10 +36,10 @@ export function loadCatalog(): Product[] {
   if (typeof window === 'undefined') return defaultProducts;
   try {
     const saved = localStorage.getItem(CATALOG_STORAGE_KEY);
-    if (saved !== null) return validateCatalog(JSON.parse(saved));
+    if (saved !== null) return migrateIllustrations(validateCatalog(JSON.parse(saved)));
     const legacy = localStorage.getItem('oticafabio_custom_products');
     if (legacy !== null) {
-      const items = validateCatalog(JSON.parse(legacy));
+      const items = migrateIllustrations(validateCatalog(JSON.parse(legacy)));
       return [...items, ...defaultProducts.filter(p => !items.some(item => item.id === p.id))];
     }
   } catch { /* Um backup corrompido não pode impedir a abertura da vitrine. */ }

@@ -132,7 +132,7 @@ export async function analyzeWithGemini(imageDataUrl: string): Promise<FaceAnaly
   if (!match) throw new VisagismoError('Formato de imagem inválido.', 400);
 
   const ai = new GoogleGenAI({ apiKey, httpOptions: { timeout: 60_000 } });
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
 
   let observation: FaceObservation;
   try {

@@ -1,8 +1,7 @@
 'use client';
 
-import Image from 'next/image';
+import { CatalogPhoto } from './CatalogPhoto';
 import { ArrowUpRight, MessageCircle, Sparkles } from 'lucide-react';
-import { useState } from 'react';
 import type { Product } from '@/types';
 import { whatsappUrl } from '@/lib/mock-data';
 import { trackEvent } from '@/lib/analytics';
@@ -16,8 +15,6 @@ export function ProductCard({
   product: Product;
   compact?: boolean;
 }) {
-  const [failedImage, setFailedImage] = useState<string | null>(null);
-
   const message = `Olá! Gostei muito da armação "${product.name}" (${product.brand} - ${product.frameShape}). Vocês têm disponível para eu experimentar?`;
   const href = whatsappUrl(message);
 
@@ -51,15 +48,7 @@ export function ProductCard({
           className="product-image block relative"
           aria-label={`Ver detalhes de ${product.name} no WhatsApp`}
         >
-          <Image
-            src={failedImage === product.image ? '/images/frame-champagne.png' : product.image}
-            onError={() => setFailedImage(product.image)}
-            alt={`Armação ${product.name} - Ótica Nezzo`}
-            fill
-            unoptimized={!product.image.startsWith('/images/')}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover"
-          />
+          <CatalogPhoto product={product} alt={`Armação ${product.name} - Ótica Nezzo`} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
           <span className="product-category">
             {product.category === 'Grau' ? 'Armação de Grau' : 'Óculos de Sol'}
           </span>
@@ -112,7 +101,7 @@ export function ProductCard({
         <div>
           <span className="block text-2xs uppercase tracking-wider text-muted">Investimento</span>
           <span className="text-sm font-bold text-forest">
-            {money.format(product.price)}
+            {product.price > 0 ? money.format(product.price) : 'Preço sob consulta'}
           </span>
         </div>
 

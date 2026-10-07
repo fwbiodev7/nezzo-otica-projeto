@@ -63,12 +63,13 @@ Acesse `/admsecreto` e use o código demonstrativo **2000**.
 
 1. Abra **Descubra seu estilo**.
 2. Envie uma foto frontal ou permita a captura pela câmera.
-3. Escolha a análise local ou a opção em nuvem, quando configurada.
-4. Veja sugestões de formatos e consulte a equipe pelo WhatsApp.
+3. Autorize o uso da foto e clique em **Analisar com IA**.
+4. Escolha grau ou sol e seu estilo preferido; compare as sugestões do catálogo real.
+5. Veja a simulação ilustrativa ou gere uma prévia com Gemini, quando configurado. Consulte a equipe pelo WhatsApp para confirmar o ajuste.
 
-O modo **Analisar neste aparelho** usa MediaPipe no navegador e não envia a foto à API de análise. Depende do carregamento do modelo e de compatibilidade com WebAssembly; não existe garantia de uso integralmente offline.
+O botão único usa MediaPipe no navegador. Quando essa análise funciona, a foto não é enviada à API de análise. Em caso de falha técnica no carregamento do modelo, serviços em nuvem configurados podem ser usados. Fotos sem rosto ou com múltiplos rostos são rejeitadas. O modelo local depende de WebAssembly e do carregamento dos arquivos preparados pelo projeto.
 
-O recurso sugere estilo. Não identifica pessoas, não faz diagnóstico ou prescrição, nem sobrepõe óculos ao rosto em tempo real. Fotos e produtos de exemplo são ilustrativos.
+O recurso oferece orientação de estilo, sem identificação pessoal ou diagnóstico. Não estima medidas em milímetros nem o tamanho físico da armação a partir do enquadramento. A simulação local alinha um desenho do formato e da cor aproximados aos olhos; não reproduz todos os detalhes do produto. A prévia em nuvem usa a foto real da armação, pode alterar detalhes e só é solicitada ao clicar em gerar. Fotos e prévias ficam na sessão e são removidas ao reiniciar. Os modelos do catálogo vieram de prints fornecidos e de uma publicação pública da ótica; preços e estoque atual exigem confirmação.
 
 ### Integrações opcionais
 
@@ -77,6 +78,7 @@ Copie `.env.local.example` para `.env.local` e configure somente os serviços qu
 | Variável | Uso |
 | --- | --- |
 | `GEMINI_API_KEY` / `GEMINI_MODEL` | Provedor de análise em nuvem |
+| `GEMINI_IMAGE_MODEL` | Modelo de geração da prévia do provador |
 | `HUGGINGFACE_API_KEY` / `HUGGINGFACE_MODEL` | Provedor alternativo |
 | `NVIDIA_API_KEY` / `NVIDIA_MODEL` | Provedor alternativo |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Destino dos links de atendimento |
@@ -85,6 +87,8 @@ Copie `.env.local.example` para `.env.local` e configure somente os serviços qu
 As integrações dependem das credenciais, cotas, modelos e termos dos respectivos fornecedores. O código prevê alternativas em caso de indisponibilidade, mas não garante continuidade ilimitada. A configuração do Firebase, isoladamente, **não conecta o catálogo a um banco nem protege o painel**.
 
 As chaves privadas não devem usar o prefixo `NEXT_PUBLIC_` nem ser enviadas ao Git. Antes de habilitar o fluxo em nuvem para visitantes, documente provedores, finalidade, retenção, base legal, aviso de privacidade e autorizações aplicáveis. Não se presume descarte imediato da imagem por serviços externos.
+
+`node --env-file=.env.local scripts/check-gemini-key.mjs` verifica a conexão com uma resposta curta e sem exibir a chave. `npm run test:provador` simula as chamadas de geração, sem enviar fotos à nuvem. O teste opcional `scripts/test-gemini-live.mjs` envia a foto de teste `scripts/fixtures/face-round.png` e a referência da armação NZ Vision Azul ao Gemini; execute somente após autorizar esse envio. Pode consumir a cota do provedor.
 
 ## Verificar a aplicação
 

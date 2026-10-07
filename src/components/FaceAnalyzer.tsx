@@ -8,27 +8,27 @@ import {
   Check,
   ImagePlus,
   Info,
-  LoaderCircle,
-  Lock,
   RotateCcw,
   ScanFace,
-  ShieldCheck,
   Sparkles,
   UploadCloud,
 } from 'lucide-react';
 import type { FaceAnalysisResult } from '@/types';
 import { FaceResult } from './FaceResult';
 import { trackEvent } from '@/lib/analytics';
+import { useCatalog } from '@/lib/use-catalog';
 
 type Stage = 'upload' | 'preview' | 'loading' | 'result';
 
 export function FaceAnalyzer() {
+  const products = useCatalog();
   const [stage, setStage] = useState<Stage>('upload');
   const [image, setImage] = useState<string | null>(null);
   const [result, setResult] = useState<FaceAnalysisResult | null>(null);
   const [error, setError] = useState('');
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [lgpdAccepted, setLgpdAccepted] = useState(true);
+  const [lgpdAccepted, setLgpdAccepted] = useState(false);
+  const [capabilities, setCapabilities] = useState({ cloudAnalysis: false, cloudTryOn: false });
 
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -41,6 +41,14 @@ export function FaceAnalyzer() {
   }
 
   useEffect(() => () => streamRef.current?.getTracks().forEach(track => track.stop()), []);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch('/api/visagismo', { signal: controller.signal })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => { if (data && !controller.signal.aborted) setCapabilities({ cloudAnalysis: data.cloudAnalysis === true, cloudTryOn: data.cloudTryOn === true }); })
+      .catch(() => { /* A análise no aparelho continua disponível. */ });
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     if (cameraOpen && videoRef.current && streamRef.current) {
@@ -110,7 +118,7 @@ export function FaceAnalyzer() {
     stopCamera();
   }
 
-  async function analyze(mode: 'gemini' | 'local') {
+  async function analyze() {
     if (!image) return;
     if (!lgpdAccepted) {
       setError('É necessário aceitar os termos de consentimento temporário da foto para continuar.');
@@ -119,33 +127,24 @@ export function FaceAnalyzer() {
 
     setError('');
     setStage('loading');
-    trackEvent('visagismo_started', { mode });
+    trackEvent('visagismo_started', { mode: 'local-first' });
 
     try {
       let analysis: FaceAnalysisResult;
-      if (mode === 'local') {
-        const { analyzeFaceLocally } = await import('@/lib/local-visagismo');
-        analysis = await analyzeFaceLocally(image);
-      } else {
-        try {
-          const response = await fetch('/api/visagismo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image }),
-          });
-          const data = await response.json();
-          if (response.ok) {
-            analysis = data as FaceAnalysisResult;
-          } else if (response.status >= 500) {
-            const { analyzeFaceLocally } = await import('@/lib/local-visagismo');
-            analysis = await analyzeFaceLocally(image);
-          } else {
-            throw new Error(data.error || 'Não foi possível analisar os traços faciais.');
-          }
-        } catch (fetchErr) {
-          const { analyzeFaceLocally } = await import('@/lib/local-visagismo');
-          analysis = await analyzeFaceLocally(image);
-        }
+      const { analyzeFaceLocally, FacePhotoError } = await import('@/lib/local-visagismo');
+      try {
+        analysis = await analyzeFaceLocally(image, products);
+      } catch (localError) {
+        if (localError instanceof FacePhotoError || !capabilities.cloudAnalysis) throw localError;
+        const response = await fetch('/api/visagismo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image }),
+          signal: AbortSignal.timeout(65_000),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Não foi possível analisar os traços faciais.');
+        analysis = data as FaceAnalysisResult;
       }
 
       setResult(analysis);
@@ -184,8 +183,8 @@ export function FaceAnalyzer() {
       <div className="mb-10 flex items-center justify-center gap-4 sm:gap-6" aria-label="Etapas do visagismo">
         {[
           ['01', 'Sua Foto'],
-          ['02', 'Leitura Biométrica'],
-          ['03', 'Harmonização & Estilo'],
+          ['02', 'Seus Traços'],
+          ['03', 'Seu Estilo'],
         ].map(([n, label], i) => (
           <div key={n} className="flex items-center gap-3 sm:gap-5">
             <span
@@ -218,7 +217,7 @@ export function FaceAnalyzer() {
       </div>
 
       {stage === 'result' && result ? (
-        <FaceResult result={result} onRestart={restart} />
+        <FaceResult result={result} image={image!} cloudTryOn={capabilities.cloudTryOn} onRestart={restart} />
       ) : (
         <div className="mx-auto max-w-3xl rounded-3xl border border-sand bg-paper p-6 sm:p-10 shadow-xl">
           {stage === 'upload' && (
@@ -307,7 +306,7 @@ export function FaceAnalyzer() {
                     className="mt-1 h-4 w-4 rounded border-accent text-accent focus:ring-accent"
                   />
                   <span className="text-xs text-ink/75 leading-relaxed">
-                    <strong>Privacidade & LGPD:</strong> Concordo que a foto enviada será utilizada unicamente para estimar as proporções anatômicas no cálculo do visagismo e <em>descartada da memória temporária imediatamente após a geração do laudo</em>, sem armazenamento permanente de biometria facial.
+                    <strong>Privacidade:</strong> Autorizo o uso da foto para análise de estilo e, se solicitado, para o provador virtual. Serviços de IA em nuvem podem processar a foto; quando indisponíveis, a análise acontece no aparelho. A foto permanece nesta sessão para o provador e é removida ao iniciar uma nova análise.
                   </span>
                 </label>
               </div>
@@ -345,52 +344,78 @@ export function FaceAnalyzer() {
                 />
               </div>
 
+              <label className="mx-auto mt-5 flex max-w-sm items-start gap-2 text-xs leading-relaxed text-primary">
+                <input type="checkbox" checked={lgpdAccepted} onChange={event => setLgpdAccepted(event.target.checked)} className="mt-0.5" aria-label="Autorizar análise da foto" />
+                Autorizo a análise de estilo desta foto e seu uso no provador. Posso apagar a foto ao iniciar uma nova análise.
+              </label>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <button
                   type="button"
-                  onClick={() => analyze('local')}
+                  onClick={analyze}
                   className="btn-olive shadow-lg"
                 >
                   <ScanFace size={18} />
-                  <span>Análise no Navegador (MediaPipe)</span>
+                  <span>Analisar com IA</span>
                   <ArrowRight size={16} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => analyze('gemini')}
-                  className="btn-outline"
-                >
-                  <Sparkles size={17} />
-                  <span>Curadoria Avançada (Gemini IA)</span>
                 </button>
               </div>
 
               <p className="mt-6 text-center text-xs text-ink/60 max-w-md mx-auto leading-relaxed">
-                No modo <strong>MediaPipe</strong>, a leitura dos pontos anatômicos e proporções é processada integralmente no seu aparelho via WebAssembly.
+                A análise acontece no seu aparelho. Depois, personalize suas sugestões e veja uma prévia da armação no rosto.
               </p>
             </>
           )}
 
           {stage === 'loading' && (
-            <div className="py-20 text-center">
-              <div className="relative mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-light border border-sand">
-                <LoaderCircle size={44} className="animate-spin text-accent" />
-                <span className="absolute inset-[-8px] animate-pulse rounded-full border border-accent/20" />
+            <div className="py-12 text-center animate-fade-in">
+              <div className="relative mx-auto aspect-[4/3] max-w-sm overflow-hidden rounded-3xl border border-sand bg-light shadow-2xl">
+                {image && (
+                  <Image
+                    src={image}
+                    alt="Processando"
+                    fill
+                    unoptimized
+                    className="object-cover opacity-70 grayscale transition-all duration-[3000ms]"
+                  />
+                )}
+                {/* Efeito de Scanner */}
+                <div className="absolute inset-0 z-10 bg-[linear-gradient(transparent_0%,rgba(201,169,110,0.15)_50%,transparent_100%)] bg-[length:100%_200%] animate-scan mix-blend-overlay" />
+                <div className="absolute left-0 top-0 z-20 h-0.5 w-full bg-accent shadow-[0_0_15px_3px_rgba(201,169,110,0.8)] animate-scan-line" />
+
+                {/* Overlay de pontos de processamento */}
+                <div className="absolute inset-0 z-30 flex items-center justify-center">
+                  <div className="h-40 w-40 rounded-full border border-dashed border-accent/60 animate-[spin_10s_linear_infinite]" />
+                  <div className="absolute h-[240px] w-[240px] rounded-full border-2 border-dotted border-accent/30 animate-[spin_15s_linear_infinite_reverse]" />
+                  <div className="absolute flex h-16 w-16 items-center justify-center rounded-full bg-primary/80 backdrop-blur-md shadow-glow">
+                    <ScanFace size={28} className="text-accent animate-pulse" />
+                  </div>
+                </div>
               </div>
-              <h2 className="mt-6 text-2xl font-semibold text-primary">
-                Mapeando proporções e simetria...
-              </h2>
-              <p className="mt-2 text-sm text-ink/65">
-                Calculando a relação entre maçãs, mandíbula e altura facial para selecionar as armações Nezzo ideais.
-              </p>
+
+              <div className="mt-10 flex flex-col items-center justify-center">
+                <div className="flex items-center gap-3 text-primary mb-3">
+                  <Sparkles size={18} className="animate-pulse text-accent" />
+                  <h2 className="text-lg font-bold tracking-[0.15em] uppercase">
+                    Visagista IA 2.0 Ativo
+                  </h2>
+                </div>
+                <div className="h-6 overflow-hidden">
+                  <div className="flex flex-col animate-slide-up-texts text-sm font-medium text-ink/75" style={{ animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}>
+                    <span className="h-6">Mapeando proporções e simetria facial...</span>
+                    <span className="h-6">Calculando distância entre pupilas e zigomático...</span>
+                    <span className="h-6">Analisando curvatura da mandíbula...</span>
+                    <span className="h-6">Buscando as melhores armações no acervo...</span>
+                    <span className="h-6">Finalizando curadoria estética...</span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
           {error && (
             <div className="mt-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-800">
               <Info size={16} className="mt-0.5 shrink-0" />
-              <span>{error}</span>
+              <span role="alert">{error}</span>
             </div>
           )}
         </div>

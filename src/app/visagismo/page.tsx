@@ -32,7 +32,7 @@ export default function VisagismoPage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-[#FAF8F5]/80">
-              Mapeie os ângulos e proporções do seu rosto com privacidade absoluta. Nosso sistema avalia a simetria e sugere os modelos e portes ideais (P, M ou G) do acervo Nezzo em Varginha.
+              Descubra modelos do catálogo Nezzo que valorizam seus traços e combinam com seu estilo. Escolha entre grau e sol, compare as sugestões e veja uma prévia no seu rosto.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -41,7 +41,7 @@ export default function VisagismoPage() {
                 <ArrowDown size={16} />
               </a>
               <span className="text-xs text-[#FAF8F5]/60 flex items-center gap-1.5">
-                <Lock size={13} className="text-highlight" /> 100% privado · Descarte imediato da foto
+                <Lock size={13} className="text-highlight" /> Foto utilizada para análise e provador nesta sessão
               </span>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function VisagismoPage() {
             <span>·</span>
             <div className="flex items-center gap-2">
               <CheckCircle2 size={16} className="text-accent shrink-0" />
-              <span>Em conformidade com a LGPD</span>
+              <span>Você controla o uso da sua foto</span>
             </div>
           </div>
         </div>

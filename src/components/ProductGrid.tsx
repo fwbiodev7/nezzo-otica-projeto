@@ -24,7 +24,7 @@ export function ProductGrid({ initialCategory = 'Todos' }: { initialCategory?: P
     return result;
   }, [allProducts, category, shape, brand, query, sort]);
   function reset() { setCategory('Todos'); setShape('Todos'); setBrand('Todas'); setQuery(''); setLimit(8); }
-  const field = 'min-h-12 rounded-lg border border-primary/15 bg-white px-4 text-xs outline-none focus:border-accent';
+  const field = 'min-h-12 rounded-lg border border-primary/15 bg-white px-4 text-xs text-primary outline-none focus:border-accent';
   return <>
     <div className="mb-5 grid gap-3 md:grid-cols-[1fr_220px_200px]">
       <label className={'flex items-center gap-3 ' + field}><Search size={17} className="shrink-0 text-accent" /><input aria-label="Buscar óculos" placeholder="Encontre por nome, marca, cor ou estilo..." value={query} onChange={e => { setQuery(e.target.value); setLimit(8); }} className="min-w-0 flex-1 bg-transparent py-3 outline-none" />{query && <button type="button" aria-label="Limpar busca" onClick={() => setQuery('')}><X size={16} /></button>}</label>

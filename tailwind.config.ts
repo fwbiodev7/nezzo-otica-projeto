@@ -85,6 +85,9 @@ const config: Config = {
         'spin-slow':      'spin 30s linear infinite',
         'glow-pulse':     'glow-pulse 3s ease-in-out infinite',
         'ticker':         'ticker-move 35s linear infinite',
+        'scan':           'scan 2.5s ease-in-out infinite alternate',
+        'scan-line':      'scan-line 2.5s ease-in-out infinite alternate',
+        'slide-up-texts': 'slide-up-texts 8s steps(4) infinite',
       },
 
       keyframes: {
@@ -120,6 +123,21 @@ const config: Config = {
         'ticker-move': {
           '0%':   { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        'scan': {
+          '0%': { backgroundPosition: '0 -100%' },
+          '100%': { backgroundPosition: '0 200%' },
+        },
+        'scan-line': {
+          '0%': { transform: 'translateY(-10px)' },
+          '100%': { transform: 'translateY(280px)' },
+        },
+        'slide-up-texts': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '20%': { transform: 'translateY(-24px)' },
+          '40%': { transform: 'translateY(-48px)' },
+          '60%': { transform: 'translateY(-72px)' },
+          '80%': { transform: 'translateY(-96px)' },
         },
       },
 
