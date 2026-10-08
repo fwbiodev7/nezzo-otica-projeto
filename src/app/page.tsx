@@ -106,7 +106,7 @@ export default function HomePage() {
           {/* Lado esquerdo — Arte biométrica */}
           <div className="style-art" aria-hidden="true">
             <Image
-              src="/images/analise-facial.png"
+              src="/images/analise-facial-oculos.png"
               alt=""
               width={1254}
               height={1254}
