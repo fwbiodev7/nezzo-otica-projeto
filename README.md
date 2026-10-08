@@ -1,12 +1,16 @@
-# sua-marca
+# Ótica Nezzo
 
-Site da sua-marca, em Varginha (MG), com identidade em azul escuro, catálogo por marca e sugestões de armações por visagismo. Construído com Next.js 16, React 19, TypeScript e Tailwind CSS 3.
+Site da Ótica Nezzo, em Varginha (MG), com identidade em azul escuro, catálogo por marca e sugestões de armações por visagismo. Construído com Next.js 16, React 19, TypeScript e Tailwind CSS 3.
+
+## Acesse o site
+
+O projeto está publicado na Vercel: [nezzo-otica-projeto.vercel.app](https://nezzo-otica-projeto.vercel.app/).
 
 > **Estado do projeto:** protótipo navegável. O editor atual salva o catálogo somente no navegador utilizado. Ainda não há autenticação administrativa no servidor nem catálogo compartilhado entre visitantes. Não é uma loja com checkout.
 
 ## O que mudou nesta atualização
 
-- Nova identidade **sua-marca**, substituindo os nomes antigos nas telas e mensagens.
+- Identidade **Ótica Nezzo**, com nome, campanha e contatos da loja nas telas e mensagens.
 - Design em azul marinho com tons de azul nos destaques e fundos, logotipo próprio, fotografia editorial, vitrine e seções redesenhadas.
 - Animações de entrada, faixa em movimento, selo giratório, efeitos nos produtos e ilustração animada do visagismo.
 - Respeito à preferência de movimento reduzido, menu móvel com fechamento por Escape e link para pular ao conteúdo.
@@ -20,7 +24,7 @@ Site da sua-marca, em Varginha (MG), com identidade em azul escuro, catálogo po
 - Recomendações exibidas apenas para produtos presentes no catálogo atual, com alternativas por formato quando necessário.
 - Validação de origem da API corrigida, sem liberar automaticamente domínios externos terminados em `.vercel.app`.
 - Comando de lint atualizado para a versão atual do Next.js.
-- Endereço, CEP e telefone da sua-marca conforme a referência fornecida, com links de localização e ligação. Horários completos e redes sociais não informados não são apresentados como fatos.
+- Endereço, CEP, telefone, horários e redes sociais da Ótica Nezzo centralizados em `src/lib/site-config.ts`, com links de localização, ligação e atendimento.
 
 ## Executar localmente
 
@@ -49,7 +53,7 @@ As marcas disponíveis nos filtros são extraídas automaticamente do campo **Ma
 
 Para uma alteração distribuída a todos os visitantes nesta versão, altere o catálogo inicial no código e publique uma nova versão. Alterações feitas no editor não são distribuídas a outros aparelhos. Catálogos já salvos no navegador continuam prevalecendo sobre os produtos iniciais até a restauração manual.
 
-Dados informados: Rua Alves e Silva, 61, Centro, Varginha - MG, CEP 37002-190; telefone (35) 99889-2492. A referência mostra uma abertura às 09h na sexta-feira, mas não uma grade completa: o site orienta a consultar o horário com a equipe. Instagram permanece oculto por não ter sido informado. A variável `NEXT_PUBLIC_WHATSAPP_NUMBER` substitui o destino dos links de WhatsApp; os dados de ligação estão em `phoneLabel` e `phoneHref`.
+Dados configurados no projeto: Rua Presidente Antônio Carlos, Centro, Varginha - MG, CEP 37002-000; telefone (35) 3677-1170; atendimento de segunda a sexta, das 09h às 18h30, e sábado, das 09h às 13h. As redes sociais configuradas são [Instagram @oticanezzo](https://www.instagram.com/oticanezzo/) e [Facebook Nezzo Visão](https://www.facebook.com/nezzovisao). A variável `NEXT_PUBLIC_WHATSAPP_NUMBER` substitui o destino dos links de WhatsApp; os dados de ligação estão em `phoneLabel` e `phoneHref`.
 
 ## Editor de demonstração
 
