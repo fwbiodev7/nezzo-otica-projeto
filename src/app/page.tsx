@@ -105,34 +105,14 @@ export default function HomePage() {
         <Reveal className="style-feature">
           {/* Lado esquerdo — Arte biométrica */}
           <div className="style-art" aria-hidden="true">
-            <div className="orbit orbit-one" />
-            <div className="orbit orbit-two" />
-            <div className="face-outline">
-              <svg viewBox="0 0 240 290" fill="none">
-                <path
-                  d="M120 24C52 24 44 82 52 145C60 213 88 256 120 263C152 256 180 213 188 145C196 82 188 24 120 24Z"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M52 118H188M61 177H179M120 24V263M70 55L171 218M170 55L69 218M50 145L120 84L190 145L120 235Z"
-                  stroke="currentColor"
-                  strokeOpacity=".15"
-                />
-                <path
-                  d="M67 118C75 108 93 108 102 118M138 118C147 108 165 108 173 118M120 126L109 172H131M98 204Q120 219 142 204"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <rect x="57" y="99" width="50" height="40" rx="17" stroke="currentColor" strokeWidth="2" />
-                <rect x="133" y="99" width="50" height="40" rx="17" stroke="currentColor" strokeWidth="2" />
-                <path d="M107 114Q120 106 133 114" stroke="currentColor" strokeWidth="2" />
-                {[[52, 145], [188, 145], [120, 24], [120, 263], [61, 177], [179, 177]].map(([cx, cy]) => (
-                  <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3" fill="currentColor" />
-                ))}
-              </svg>
-              <div className="scan-line" />
-            </div>
+            <Image
+              src="/images/analise-facial.png"
+              alt=""
+              width={1254}
+              height={1254}
+              sizes="(max-width: 767px) 100vw, (max-width: 1280px) 50vw, 520px"
+              className="style-face-image"
+            />
             <span className="scan-label">
               <span className="status-dot" /> VISAGISMO 2.0 · SEU ESTILO
             </span>
@@ -171,7 +151,7 @@ export default function HomePage() {
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/visagismo" className="btn btn-dark text-xs">
                 <ScanFace size={16} />
-                Fazer meu visagismo agora
+                Fazer minha analise agora!
                 <ArrowUpRight size={15} />
               </Link>
             </div>
