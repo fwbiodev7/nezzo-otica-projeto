@@ -210,6 +210,7 @@ export async function analyzeWithHuggingFace(imageDataUrl: string): Promise<Face
   ].join(' ');
 
   const response = await fetch('https://router.huggingface.co/v1/chat/completions', {
+    signal: AbortSignal.timeout(30_000),
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + apiKey,
@@ -268,6 +269,7 @@ export async function analyzeWithNvidia(imageDataUrl: string): Promise<FaceAnaly
   ].join(' ');
 
   const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+    signal: AbortSignal.timeout(30_000),
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + apiKey,

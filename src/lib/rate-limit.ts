@@ -1,3 +1,5 @@
+import { isIP } from 'node:net';
+
 /**
  * Rate Limiter simples em memória para proteção contra ataques de negação de serviço (DoS)
  * e abuso de cota de inteligência artificial na Vercel / Node.js.
@@ -9,9 +11,10 @@ interface RateLimitRecord {
 }
 
 const ipMap = new Map<string, RateLimitRecord>();
+const MAX_RECORDS = 2048;
 
 // Limpeza periódica automática para não acumular memória
-setInterval(() => {
+const cleanupTimer = setInterval(() => {
   const now = Date.now();
   for (const [ip, record] of ipMap.entries()) {
     if (record.resetTime <= now) {
@@ -19,6 +22,7 @@ setInterval(() => {
     }
   }
 }, 60_000);
+cleanupTimer.unref();
 
 export interface RateLimitOptions {
   windowMs: number; // Janela de tempo em milissegundos
@@ -33,6 +37,10 @@ export function checkRateLimit(
   const record = ipMap.get(clientIp);
 
   if (!record || record.resetTime <= now) {
+    if (!record && ipMap.size >= MAX_RECORDS) {
+      for (const [key, entry] of ipMap) if (entry.resetTime <= now) ipMap.delete(key);
+      if (ipMap.size >= MAX_RECORDS) return { allowed: false, remaining: 0, resetInSec: 60 };
+    }
     ipMap.set(clientIp, {
       count: 1,
       resetTime: now + options.windowMs,
@@ -61,14 +69,15 @@ export function checkRateLimit(
 }
 
 /**
- * Extrai o IP real do cliente mesmo através de proxies da Vercel / Cloudflare
+ * Only an explicitly configured ingress may provide client identity.
+ * The ingress MUST overwrite the selected header and block direct access.
+ * Without that guarantee, requests share a conservative bucket.
  */
 export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
+  const trustedHeader = process.env.TRUSTED_PROXY_IP_HEADER;
+  if (trustedHeader && /^[a-z0-9-]{1,64}$/.test(trustedHeader)) {
+    const value = request.headers.get(trustedHeader)?.trim();
+    if (value && value.length <= 45 && isIP(value)) return value;
   }
-  const realIp = request.headers.get('x-real-ip');
-  if (realIp) return realIp.trim();
-  return '127.0.0.1';
+  return 'shared-client';
 }

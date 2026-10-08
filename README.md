@@ -6,7 +6,7 @@ Site da Ótica Nezzo, em Varginha (MG), com identidade em azul escuro, catálogo
 
 O projeto está publicado na Vercel: [nezzo-otica-projeto.vercel.app](https://nezzo-otica-projeto.vercel.app/).
 
-> **Estado do projeto:** protótipo navegável. O editor atual salva o catálogo somente no navegador utilizado. Ainda não há autenticação administrativa no servidor nem catálogo compartilhado entre visitantes. Não é uma loja com checkout.
+> **Estado do projeto:** protótipo navegável. O painel agora exige autenticação no servidor; o catálogo continua salvo somente no navegador utilizado, sem compartilhamento entre visitantes. Não é uma loja com checkout. A versão publicada precisa receber as novas variáveis e um novo deploy para aplicar estas correções.
 
 ## O que mudou nesta atualização
 
@@ -47,7 +47,7 @@ Os comandos de desenvolvimento e compilação preparam os arquivos do MediaPipe.
 | Cores da identidade | Variáveis `--brand-*` em `src/app/globals.css` |
 | Produtos iniciais, marcas, preços e imagens | `src/lib/mock-data.ts` |
 | Imagens próprias | `public/images/` |
-| Produtos no editor de demonstração | `/admsecreto` |
+| Produtos no painel administrativo | `/admin` (`/admsecreto` redireciona) |
 
 As marcas disponíveis nos filtros são extraídas automaticamente do campo **Marca / Coleção** dos produtos. Não é preciso editar o layout para acrescentar uma marca.
 
@@ -55,13 +55,24 @@ Para uma alteração distribuída a todos os visitantes nesta versão, altere o 
 
 Dados configurados no projeto: Rua Presidente Antônio Carlos, Centro, Varginha - MG, CEP 37002-000; telefone (35) 3677-1170; atendimento de segunda a sexta, das 09h às 18h30, e sábado, das 09h às 13h. As redes sociais configuradas são [Instagram @oticanezzo](https://www.instagram.com/oticanezzo/) e [Facebook Nezzo Visão](https://www.facebook.com/nezzovisao). A variável `NEXT_PUBLIC_WHATSAPP_NUMBER` substitui o destino dos links de WhatsApp; os dados de ligação estão em `phoneLabel` e `phoneHref`.
 
-## Editor de demonstração
+## Painel administrativo
 
-Acesse `/admsecreto` e use o código demonstrativo **2000**.
+Acesse `/admin`. O código antigo foi removido. A senha é validada no servidor usando scrypt; a sessão dura oito horas em cookie HttpOnly, Secure em produção e SameSite=Strict. Sem configuração válida, o painel fica bloqueado.
+
+```bash
+npm run setup:admin
+npm run dev
+```
+
+O primeiro comando gera uma senha aleatória, grava somente seu hash e a chave de sessão em `.env.local` e entrega a senha em `.admin-credentials.local.txt`. Ambos os arquivos são privados e ignorados pelo Git. Guarde a senha em um gerenciador; não publique o arquivo de credenciais. Para escolher uma senha, defina `ADMIN_NEW_PASSWORD` no ambiente antes de executar o comando (16 a 128 caracteres).
+
+Para trocar a senha, execute novamente `npm run setup:admin` e reinicie o servidor. A troca também gera uma nova chave e invalida sessões anteriores após a nova configuração entrar em vigor.
+
+Na Vercel, configure `ADMIN_PASSWORD_HASH` e `ADMIN_SESSION_SECRET` a partir de `.env.local`, como variáveis privadas nos ambientes desejados. Configure também `APP_ORIGIN` com a origem exata do site, como `https://nezzo-otica-projeto.vercel.app`, e faça um novo deploy. Em Preview, use a origem do respectivo endereço. Não use `NEXT_PUBLIC_` nestes valores. Nenhuma configuração local altera automaticamente a Vercel.
 
 É possível adicionar, editar, excluir, exportar e importar produtos. Fotos JPG, PNG ou WebP de até 10 MB são reduzidas antes do salvamento. O navegador possui limite de armazenamento; faça exportações periódicas e mantenha as imagens pequenas.
 
-**Esse código público não é uma senha de produção.** As chaves antigas de armazenamento foram mantidas para preservar os cadastros locais existentes.
+As chaves antigas de armazenamento do catálogo foram mantidas para preservar cadastros locais. Alterar `sessionStorage` não autentica o painel. A autenticação não transforma os dados de `localStorage` em um banco compartilhado ou em registros confiáveis de servidor.
 
 ## Visagismo
 
@@ -81,6 +92,9 @@ Copie `.env.local.example` para `.env.local` e configure somente os serviços qu
 
 | Variável | Uso |
 | --- | --- |
+| `ADMIN_PASSWORD_HASH` / `ADMIN_SESSION_SECRET` | Autenticação administrativa no servidor |
+| `APP_ORIGIN` | Origem pública fixa para validar login, logout e análise atrás de proxy |
+| `TRUSTED_PROXY_IP_HEADER` | Opcional; somente se o ingresso substitui esse cabeçalho e bloqueia acesso direto |
 | `GEMINI_API_KEY` / `GEMINI_MODEL` | Provedor de análise em nuvem |
 | `HUGGINGFACE_API_KEY` / `HUGGINGFACE_MODEL` | Provedor alternativo |
 | `NVIDIA_API_KEY` / `NVIDIA_MODEL` | Provedor alternativo |
@@ -101,6 +115,7 @@ Na Vercel, adicione `GEMINI_API_KEY` como variável **Secret** em **Settings →
 npm run lint
 npm run typecheck
 npm run build
+npm run test:security
 ```
 
 Com o servidor em execução e o Google Chrome instalado:
@@ -110,7 +125,11 @@ npm run test:site
 npm run test:visagismo
 ```
 
-Para testar outro endereço, defina `DEMO_BASE_URL`, por exemplo `http://127.0.0.1:3001`.
+Para testar outro endereço, defina `DEMO_BASE_URL`. O teste do site também exige `ADMIN_TEST_PASSWORD` com a senha do servidor de testes. Se o endereço acessado difere da URL interna do servidor, configure `APP_ORIGIN` com a origem usada no navegador.
+
+`test:security` exige uma compilação prévia, inicia um servidor isolado com senha temporária e sem chaves de IA, testa o código antigo, flags de sessão antigas, cookies adulterados/expirados, rotação, origem, limites por IP e leitura de JSON por chunks. Capturas de login ficam no diretório temporário do sistema ou em `SECURITY_ARTIFACT_DIR`, quando definido. O teste não imprime a senha nem usa provedores pagos.
+
+O limitador atua por processo. Sem um ingresso comprovadamente confiável, as requisições compartilham uma cota: cinco tentativas de login a cada dez minutos e doze análises em nuvem por minuto. Há ainda limites globais por processo e duas análises simultâneas. Reinícios e múltiplas instâncias não compartilham essas cotas; produção com escala exige armazenamento central para o limitador.
 
 O teste do site cobre catálogo, busca, filtros, ordenação, cadastro com centavos, persistência de catálogo vazio, navegação móvel, preferência de movimento reduzido, validação da API e visagismo local. Capturas de tela ficam em `artifacts/`, fora do Git.
 
@@ -118,7 +137,7 @@ O teste do site cobre catálogo, busca, filtros, ordenação, cadastro com centa
 
 ## Antes de usar comercialmente
 
-- Implementar autenticação e autorização no servidor e armazenamento central persistente de produtos e imagens.
+- Configurar os segredos administrativos na hospedagem e implementar armazenamento central persistente de produtos e imagens, com autorização em cada operação de servidor.
 - Configurar backup e testar restauração. A exportação local não é backup automático.
 - Confirmar contatos, preços, disponibilidade e autorização para uso de marcas e imagens.
 - Definir a política de privacidade e as condições do processamento facial, especialmente em nuvem.

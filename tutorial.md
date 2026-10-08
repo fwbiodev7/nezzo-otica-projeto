@@ -13,9 +13,11 @@ Abra **Nossos óculos**. Busque por nome, marca, cor ou estilo, combine os filtr
 
 O recurso oferece sugestões de estilo, sem diagnóstico ou prescrição. Não sobrepõe óculos ao rosto em tempo real. O modo local depende de carregar os arquivos do modelo. A opção em nuvem envia a imagem a serviços externos; suas condições de privacidade devem ser revisadas antes de uso comercial.
 
-## Editar o catálogo de demonstração
+## Editar o catálogo
 
-Acesse o endereço do site seguido de **/admsecreto**. O código demonstrativo é **2000**. Ele é público e não substitui autenticação de produção.
+Acesse o endereço do site seguido de **/admin** e use a senha entregue pelo responsável pelo site. **/admsecreto** redireciona para o mesmo painel. O código antigo foi removido e a verificação agora ocorre no servidor.
+
+Para configurar ou trocar a senha localmente, execute `npm run setup:admin`. A senha fica no arquivo privado `.admin-credentials.local.txt`; os segredos do servidor ficam em `.env.local`. Reinicie o servidor após a troca. Na Vercel, configure `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET` e `APP_ORIGIN`, conforme o README, e faça um novo deploy. Se os segredos não estiverem configurados, o painel permanece bloqueado.
 
 **As alterações ficam apenas neste navegador e não aparecem para visitantes em outros aparelhos.**
 
@@ -32,4 +34,4 @@ Não limpe os dados do navegador sem guardar uma cópia. Caso o armazenamento es
 
 Nome, campanha, foto principal e contatos ficam em `src/lib/site-config.ts`. As cores ficam no início de `src/app/globals.css`. O responsável pelo código pode alterar esses arquivos e publicar uma nova versão sem reconstruir as páginas.
 
-Para gestão comercial compartilhada, ainda é necessário implementar autenticação no servidor, banco central e backup. Veja o [README](README.md) para execução, testes e requisitos de publicação.
+Para gestão comercial compartilhada, ainda é necessário implementar banco central, autorização das operações e backup. Veja o [README](README.md) para execução, testes e requisitos de publicação.

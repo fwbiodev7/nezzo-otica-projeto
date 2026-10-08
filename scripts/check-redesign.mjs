@@ -2,6 +2,8 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const base=process.env.DEMO_BASE_URL || 'http://localhost:3000';
+const adminPassword=process.env.ADMIN_TEST_PASSWORD;
+assert(adminPassword, 'Defina ADMIN_TEST_PASSWORD com a senha do servidor de testes.');
 await fs.mkdir('artifacts',{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
@@ -52,7 +54,7 @@ try {
  console.log('Marcas dinâmicas, preço com centavos, vitrine sincronizada, catálogo vazio e dados corrompidos: OK');
  await page.evaluate(()=>localStorage.removeItem('oticafabio_catalog_v1'));
  await page.goto(base+'/admsecreto');
- await page.getByPlaceholder('Ex: 2000').fill('2000');
+ await page.getByLabel('Senha de acesso').fill(adminPassword);
  await page.getByRole('button',{name:'Entrar no Dashboard'}).click();
  await page.getByRole('button',{name:/Catálogo/}).first().click();
  await page.getByRole('button',{name:'Novo Produto'}).click();
@@ -66,7 +68,9 @@ try {
  await page.getByRole('button',{name:'Novo Produto'}).click();
  await page.keyboard.press('Escape'); assert.equal(await page.locator('dialog').count(),0);
  console.log('Cadastro, preço decimal e fechamento acessível do modal: OK');
- await page.evaluate(()=>{localStorage.removeItem('oticafabio_catalog_v1');sessionStorage.clear();});
+ const logout=await page.request.delete(base+'/api/admin/session',{headers:{Origin:new URL(base).origin}});
+ assert.equal(logout.status(),200);
+ await page.evaluate(()=>localStorage.removeItem('oticafabio_catalog_v1'));
  await page.setViewportSize({width:390,height:844});
  for(const route of ['/','/catalogo','/sobre','/contato','/visagismo']) {
   await page.goto(base+route,{waitUntil:'domcontentloaded'}); await page.locator('main h1').waitFor();

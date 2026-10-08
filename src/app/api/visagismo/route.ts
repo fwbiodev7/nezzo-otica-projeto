@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { analyzeFace, VisagismoError } from '@/lib/gemini';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
+import { isSameOrigin, readBoundedJson, RequestBodyError } from '@/lib/request-security';
 
 export const runtime = 'nodejs';
+let activeRequests = 0;
 
 export function GET() {
   return NextResponse.json({
@@ -11,10 +13,18 @@ export function GET() {
 }
 
 export async function POST(request: Request) {
+  if (request.headers.get('origin') && !isSameOrigin(request)) {
+    return NextResponse.json({ error: 'Acesso não autorizado para origens externas.' }, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+  }
+  const globalLimit = checkRateLimit('analysis-global', { windowMs: 60_000, maxRequests: 60 });
+  if (!globalLimit.allowed || activeRequests >= 2) {
+    return NextResponse.json({ error: 'Muitas análises simultâneas. Aguarde e tente novamente.' }, { status: 429, headers: { 'Retry-After': '60', 'Cache-Control': 'no-store' } });
+  }
+  activeRequests++;
   try {
     // 1. Proteção de Taxa de Requisições (Rate Limiting anti-DoS e anti-abuso de tokens)
     const clientIp = getClientIp(request);
-    const limit = checkRateLimit(clientIp, { windowMs: 60_000, maxRequests: 12 });
+    const limit = checkRateLimit(`analysis:${clientIp}`, { windowMs: 60_000, maxRequests: 12 });
     
     if (!limit.allowed) {
       return NextResponse.json(
@@ -31,23 +41,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Proteção Anti-Hotlink / Cross-Origin Hijacking
-    const origin = request.headers.get('origin');
-    const host = request.headers.get('host');
-    if (origin && host) {
-      let sameOrigin = false;
-      try { const parsed = new URL(origin); sameOrigin = ['http:', 'https:'].includes(parsed.protocol) && parsed.host === host; } catch { /* Origem inválida. */ }
-      if (!sameOrigin) {
-        return NextResponse.json(
-          { error: 'Acesso não autorizado para origens externas.' },
-          { status: 403 }
-        );
-      }
-    }
-
-    // 3. Validação rigorosa do corpo da requisição
-    const body = (await request.json().catch(() => null)) as { image?: unknown } | null;
-    if (!body || typeof body.image !== 'string') {
+    // Bound total bytes before JSON parsing, including extra fields/escapes.
+    const body = await readBoundedJson(request, 14_001_024);
+    if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).length !== 1 || !('image' in body) || typeof body.image !== 'string') {
       return NextResponse.json({ error: 'Nenhuma foto enviada para análise.' }, { status: 400 });
     }
 
@@ -79,6 +75,9 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
+    if (error instanceof RequestBodyError) {
+      return NextResponse.json({ error: error.message }, { status: error.status, headers: { 'Cache-Control': 'no-store' } });
+    }
     if (error instanceof VisagismoError) {
       return NextResponse.json(
         { error: error.message },
@@ -92,5 +91,5 @@ export async function POST(request: Request) {
       { error: 'Não foi possível concluir a análise no momento. Tente novamente ou use o teste local.' },
       { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
-  }
+  } finally { activeRequests--; }
 }

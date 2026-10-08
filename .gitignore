@@ -1,6 +1,7 @@
 node_modules
 .next
 .env.local
+.admin-credentials.local.txt
 *.tsbuildinfo
 /artifacts/
 /public/mediapipe/
